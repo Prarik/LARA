@@ -15,6 +15,9 @@
 		37FC6B3E159905F9000EF93F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B3D159905F9000EF93F /* main.m */; };
 		37FC6B42159905F9000EF93F /* LARAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B41159905F9000EF93F /* LARAppDelegate.m */; };
 		37FC6B45159905F9000EF93F /* LARA.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B43159905F9000EF93F /* LARA.xcdatamodeld */; };
+		37FC6B52159907A5000EF93F /* LARRadarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B50159907A5000EF93F /* LARRadarViewController.m */; };
+		37FC6B53159907A5000EF93F /* LARRadarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37FC6B51159907A5000EF93F /* LARRadarView.xib */; };
+		37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -23,13 +26,18 @@
 		37FC6B31159905F9000EF93F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		37FC6B33159905F9000EF93F /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		37FC6B35159905F9000EF93F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		37FC6B39159905F9000EF93F /* LARA-Info.plist */ = {isa = PBXFileReference; path = "LARA-Info.plist"; sourceTree = "<group>"; };
+		37FC6B39159905F9000EF93F /* LARA-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "LARA-Info.plist"; sourceTree = "<group>"; };
 		37FC6B3B159905F9000EF93F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		37FC6B3D159905F9000EF93F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		37FC6B3F159905F9000EF93F /* LARA-Prefix.pch */ = {isa = PBXFileReference; path = "LARA-Prefix.pch"; sourceTree = "<group>"; };
-		37FC6B40159905F9000EF93F /* LARAppDelegate.h */ = {isa = PBXFileReference; path = LARAppDelegate.h; sourceTree = "<group>"; };
+		37FC6B3F159905F9000EF93F /* LARA-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "LARA-Prefix.pch"; sourceTree = "<group>"; };
+		37FC6B40159905F9000EF93F /* LARAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LARAppDelegate.h; sourceTree = "<group>"; };
 		37FC6B41159905F9000EF93F /* LARAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LARAppDelegate.m; sourceTree = "<group>"; };
 		37FC6B44159905F9000EF93F /* LARA.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LARA.xcdatamodel; sourceTree = "<group>"; };
+		37FC6B4F159907A5000EF93F /* LARRadarViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarViewController.h; sourceTree = "<group>"; };
+		37FC6B50159907A5000EF93F /* LARRadarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarViewController.m; sourceTree = "<group>"; };
+		37FC6B51159907A5000EF93F /* LARRadarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarView.xib; sourceTree = "<group>"; };
+		37FC6B541599084A000EF93F /* LARRadarPointsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarPointsViewController.h; sourceTree = "<group>"; };
+		37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,9 +86,10 @@
 		37FC6B37159905F9000EF93F /* LARA */ = {
 			isa = PBXGroup;
 			children = (
-				37FC6B40159905F9000EF93F /* LARAppDelegate.h */,
-				37FC6B41159905F9000EF93F /* LARAppDelegate.m */,
-				37FC6B43159905F9000EF93F /* LARA.xcdatamodeld */,
+				37FC6B4E159906D3000EF93F /* Delegates */,
+				37FC6B4D159906CC000EF93F /* Controllers */,
+				37FC6B4C159906C4000EF93F /* Model */,
+				37FC6B4B159906BF000EF93F /* Views */,
 				37FC6B38159905F9000EF93F /* Supporting Files */,
 			);
 			path = LARA;
@@ -95,6 +104,42 @@
 				37FC6B3F159905F9000EF93F /* LARA-Prefix.pch */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		37FC6B4B159906BF000EF93F /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				37FC6B51159907A5000EF93F /* LARRadarView.xib */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		37FC6B4C159906C4000EF93F /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				37FC6B43159905F9000EF93F /* LARA.xcdatamodeld */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		37FC6B4D159906CC000EF93F /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				37FC6B4F159907A5000EF93F /* LARRadarViewController.h */,
+				37FC6B50159907A5000EF93F /* LARRadarViewController.m */,
+				37FC6B541599084A000EF93F /* LARRadarPointsViewController.h */,
+				37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		37FC6B4E159906D3000EF93F /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				37FC6B40159905F9000EF93F /* LARAppDelegate.h */,
+				37FC6B41159905F9000EF93F /* LARAppDelegate.m */,
+			);
+			name = Delegates;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -150,6 +195,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37FC6B3C159905F9000EF93F /* InfoPlist.strings in Resources */,
+				37FC6B53159907A5000EF93F /* LARRadarView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -163,6 +209,8 @@
 				37FC6B3E159905F9000EF93F /* main.m in Sources */,
 				37FC6B42159905F9000EF93F /* LARAppDelegate.m in Sources */,
 				37FC6B45159905F9000EF93F /* LARA.xcdatamodeld in Sources */,
+				37FC6B52159907A5000EF93F /* LARRadarViewController.m in Sources */,
+				37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -7,10 +7,13 @@
 //
 
 #import "LARAppDelegate.h"
+#import "LARRadarViewController.h"
+#import "LARRadarPointsViewController.h"
 
 @implementation LARAppDelegate
 
 @synthesize window = _window;
+@synthesize rootController = _rootController;
 @synthesize managedObjectContext = __managedObjectContext;
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
@@ -18,6 +21,22 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    LARRadarViewController *radarController = [[LARRadarViewController alloc] init];
+    LARRadarPointsViewController *radarPoints = [[LARRadarPointsViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:radarPoints];
+    navController.navigationBar.tintColor = [UIColor blackColor];
+    
+    self.rootController = [[UITabBarController alloc] init];
+    
+    NSArray *controllerArray = [[NSArray alloc] initWithObjects:radarController, navController, nil];
+    
+    self.rootController.viewControllers = controllerArray;
+    
+    [self.window addSubview:self.rootController.view];
+    
+    
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
