@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		37F84A851599192D005AA447 /* TrackedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F84A841599192D005AA447 /* TrackedObject.m */; };
 		37FC6B30159905F9000EF93F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B2F159905F9000EF93F /* UIKit.framework */; };
 		37FC6B32159905F9000EF93F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B31159905F9000EF93F /* Foundation.framework */; };
 		37FC6B34159905F9000EF93F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B33159905F9000EF93F /* CoreGraphics.framework */; };
@@ -21,6 +22,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		37F84A831599192D005AA447 /* TrackedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackedObject.h; sourceTree = "<group>"; };
+		37F84A841599192D005AA447 /* TrackedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackedObject.m; sourceTree = "<group>"; };
 		37FC6B2B159905F9000EF93F /* LARA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LARA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37FC6B2F159905F9000EF93F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		37FC6B31159905F9000EF93F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -118,6 +121,8 @@
 			isa = PBXGroup;
 			children = (
 				37FC6B43159905F9000EF93F /* LARA.xcdatamodeld */,
+				37F84A831599192D005AA447 /* TrackedObject.h */,
+				37F84A841599192D005AA447 /* TrackedObject.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -211,6 +216,7 @@
 				37FC6B45159905F9000EF93F /* LARA.xcdatamodeld in Sources */,
 				37FC6B52159907A5000EF93F /* LARRadarViewController.m in Sources */,
 				37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */,
+				37F84A851599192D005AA447 /* TrackedObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,6 +320,7 @@
 				37FC6B4A159905F9000EF93F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 
