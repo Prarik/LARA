@@ -14,6 +14,7 @@
 
 @synthesize window = _window;
 @synthesize rootController = _rootController;
+@synthesize radarController = _radarController;
 @synthesize managedObjectContext = __managedObjectContext;
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
@@ -23,12 +24,14 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     LARRadarViewController *radarController = [[LARRadarViewController alloc] init];
+    self.radarController = radarController;
     LARRadarPointsViewController *radarPoints = [[LARRadarPointsViewController alloc] initWithStyle:UITableViewStylePlain];
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:radarPoints];
     navController.navigationBar.tintColor = [UIColor blackColor];
     
     self.rootController = [[UITabBarController alloc] init];
+    self.rootController.delegate = self;
     
     NSArray *controllerArray = [[NSArray alloc] initWithObjects:radarController, navController, nil];
     
@@ -164,6 +167,15 @@
 - (NSURL *)applicationDocumentsDirectory
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
+
+#pragma mark - UITabBarControllerDelegate Methods
+
+- (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
+{
+    [self.radarController stopAnimatingRadar];
+    
+    return YES;
 }
 
 @end
