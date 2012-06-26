@@ -12,4 +12,6 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView *radarScreen;
 
+- (void)stopAnimatingRadar;
+
 @end

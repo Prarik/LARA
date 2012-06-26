@@ -11,11 +11,18 @@
 
 @interface LARRadarViewController ()
 
+@property (nonatomic) BOOL shouldAnimateRadar;
+
 @end
 
 @implementation LARRadarViewController
 
 @synthesize radarScreen;
+@synthesize shouldAnimateRadar;
+
+- (void)stopAnimatingRadar{
+    self.shouldAnimateRadar = NO;
+}
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -31,6 +38,7 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
+    self.shouldAnimateRadar = YES;
     UIImage *radarBackground = [UIImage imageNamed:@"Radarprac2"];
     self.radarScreen.image = radarBackground;
     self.radarScreen.alpha = 0.6;
@@ -39,6 +47,7 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
+    self.radarScreen = nil;
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
 }
