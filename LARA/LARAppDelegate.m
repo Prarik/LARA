@@ -9,6 +9,7 @@
 #import "LARAppDelegate.h"
 #import "LARRadarViewController.h"
 #import "LARRadarPointsViewController.h"
+#import <CoreLocation/CoreLocation.h>
 
 @implementation LARAppDelegate
 
@@ -18,11 +19,13 @@
 @synthesize managedObjectContext = __managedObjectContext;
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
+@synthesize locationManager = _locationManager;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
+    [self setUpLocationManager];
     LARRadarViewController *radarController = [[LARRadarViewController alloc] init];
     self.radarController = radarController;
     LARRadarPointsViewController *radarPoints = [[LARRadarPointsViewController alloc] initWithStyle:UITableViewStylePlain];
@@ -44,6 +47,12 @@
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     return YES;
+}
+
+- (void)setUpLocationManager{
+    self.locationManager = [[CLLocationManager alloc] init];
+    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager startUpdatingLocation];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
