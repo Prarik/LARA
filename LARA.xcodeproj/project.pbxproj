@@ -19,6 +19,7 @@
 		37FC6B52159907A5000EF93F /* LARRadarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B50159907A5000EF93F /* LARRadarViewController.m */; };
 		37FC6B53159907A5000EF93F /* LARRadarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37FC6B51159907A5000EF93F /* LARRadarView.xib */; };
 		37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */; };
+		6F8571F81599500A0095DFCB /* Radarprac2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F8571F71599500A0095DFCB /* Radarprac2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		37FC6B51159907A5000EF93F /* LARRadarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarView.xib; sourceTree = "<group>"; };
 		37FC6B541599084A000EF93F /* LARRadarPointsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarPointsViewController.h; sourceTree = "<group>"; };
 		37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointsViewController.m; sourceTree = "<group>"; };
+		6F8571F71599500A0095DFCB /* Radarprac2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Radarprac2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 		37FC6B38159905F9000EF93F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				6F8571F315994C060095DFCB /* Images */,
 				37FC6B39159905F9000EF93F /* LARA-Info.plist */,
 				37FC6B3A159905F9000EF93F /* InfoPlist.strings */,
 				37FC6B3D159905F9000EF93F /* main.m */,
@@ -145,6 +148,14 @@
 				37FC6B41159905F9000EF93F /* LARAppDelegate.m */,
 			);
 			name = Delegates;
+			sourceTree = "<group>";
+		};
+		6F8571F315994C060095DFCB /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				6F8571F71599500A0095DFCB /* Radarprac2.png */,
+			);
+			name = Images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -201,6 +212,7 @@
 			files = (
 				37FC6B3C159905F9000EF93F /* InfoPlist.strings in Resources */,
 				37FC6B53159907A5000EF93F /* LARRadarView.xib in Resources */,
+				6F8571F81599500A0095DFCB /* Radarprac2.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,6 +297,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LARA/LARA-Prefix.pch";
 				INFOPLIST_FILE = "LARA/LARA-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -296,6 +309,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LARA/LARA-Prefix.pch";
 				INFOPLIST_FILE = "LARA/LARA-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

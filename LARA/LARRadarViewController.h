@@ -10,4 +10,6 @@
 
 @interface LARRadarViewController : UIViewController
 
+@property (nonatomic, strong) IBOutlet UIImageView *radarScreen;
+
 @end
