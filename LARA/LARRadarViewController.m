@@ -7,11 +7,15 @@
 //
 
 #import "LARRadarViewController.h"
+#import "LARRadarScan.h"
 #define kTitle @"Sensor"
 
 @interface LARRadarViewController ()
 
 @property (nonatomic) BOOL shouldAnimateRadar;
+@property (strong, nonatomic) LARRadarScan *radarScan;
+
+- (void)loadBackgroundImage;
 
 @end
 
@@ -19,6 +23,7 @@
 
 @synthesize radarScreen;
 @synthesize shouldAnimateRadar;
+@synthesize radarScan;
 
 - (void)stopAnimatingRadar{
     self.shouldAnimateRadar = NO;
@@ -39,9 +44,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.shouldAnimateRadar = YES;
-    UIImage *radarBackground = [UIImage imageNamed:@"Radarprac2"];
-    self.radarScreen.image = radarBackground;
-    self.radarScreen.alpha = 0.6;
+    [self loadBackgroundImage];
 }
 
 - (void)viewDidUnload
@@ -55,6 +58,12 @@
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
+}
+
+- (void)loadBackgroundImage{
+    UIImage *radarBackground = [UIImage imageNamed:@"Radarprac2"];
+    self.radarScreen.image = radarBackground;
+    self.radarScreen.alpha = 0.6;
 }
 
 @end

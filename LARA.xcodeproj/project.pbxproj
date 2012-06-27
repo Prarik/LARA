@@ -19,6 +19,8 @@
 		37FC6B52159907A5000EF93F /* LARRadarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B50159907A5000EF93F /* LARRadarViewController.m */; };
 		37FC6B53159907A5000EF93F /* LARRadarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37FC6B51159907A5000EF93F /* LARRadarView.xib */; };
 		37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */; };
+		6F30AA2C159ACB220016DF55 /* LARRadarScan.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F30AA2B159ACB220016DF55 /* LARRadarScan.m */; };
+		6F30AA2E159ACE460016DF55 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F30AA2D159ACE460016DF55 /* CoreLocation.framework */; };
 		6F8571F81599500A0095DFCB /* Radarprac2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F8571F71599500A0095DFCB /* Radarprac2.png */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +44,9 @@
 		37FC6B51159907A5000EF93F /* LARRadarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarView.xib; sourceTree = "<group>"; };
 		37FC6B541599084A000EF93F /* LARRadarPointsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarPointsViewController.h; sourceTree = "<group>"; };
 		37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointsViewController.m; sourceTree = "<group>"; };
+		6F30AA2A159ACB220016DF55 /* LARRadarScan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarScan.h; sourceTree = "<group>"; };
+		6F30AA2B159ACB220016DF55 /* LARRadarScan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarScan.m; sourceTree = "<group>"; };
+		6F30AA2D159ACE460016DF55 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6F8571F71599500A0095DFCB /* Radarprac2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Radarprac2.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -50,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6F30AA2E159ACE460016DF55 /* CoreLocation.framework in Frameworks */,
 				37FC6B30159905F9000EF93F /* UIKit.framework in Frameworks */,
 				37FC6B32159905F9000EF93F /* Foundation.framework in Frameworks */,
 				37FC6B34159905F9000EF93F /* CoreGraphics.framework in Frameworks */,
@@ -84,6 +90,7 @@
 				37FC6B31159905F9000EF93F /* Foundation.framework */,
 				37FC6B33159905F9000EF93F /* CoreGraphics.framework */,
 				37FC6B35159905F9000EF93F /* CoreData.framework */,
+				6F30AA2D159ACE460016DF55 /* CoreLocation.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -93,6 +100,7 @@
 			children = (
 				37FC6B4E159906D3000EF93F /* Delegates */,
 				37FC6B4D159906CC000EF93F /* Controllers */,
+				6F30AA28159ACAE00016DF55 /* Objects */,
 				37FC6B4C159906C4000EF93F /* Model */,
 				37FC6B4B159906BF000EF93F /* Views */,
 				37FC6B38159905F9000EF93F /* Supporting Files */,
@@ -148,6 +156,15 @@
 				37FC6B41159905F9000EF93F /* LARAppDelegate.m */,
 			);
 			name = Delegates;
+			sourceTree = "<group>";
+		};
+		6F30AA28159ACAE00016DF55 /* Objects */ = {
+			isa = PBXGroup;
+			children = (
+				6F30AA2A159ACB220016DF55 /* LARRadarScan.h */,
+				6F30AA2B159ACB220016DF55 /* LARRadarScan.m */,
+			);
+			name = Objects;
 			sourceTree = "<group>";
 		};
 		6F8571F315994C060095DFCB /* Images */ = {
@@ -229,6 +246,7 @@
 				37FC6B52159907A5000EF93F /* LARRadarViewController.m in Sources */,
 				37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */,
 				37F84A851599192D005AA447 /* TrackedObject.m in Sources */,
+				6F30AA2C159ACB220016DF55 /* LARRadarScan.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
