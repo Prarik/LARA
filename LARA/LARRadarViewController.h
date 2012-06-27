@@ -11,7 +11,9 @@
 @interface LARRadarViewController : UIViewController
 
 @property (nonatomic, strong) IBOutlet UIImageView *radarScreen;
+@property (nonatomic, strong) IBOutlet UIButton *radarButton;
 
+- (IBAction)radarButtonClicked;
 - (void)stopAnimatingRadar;
 
 @end

@@ -10,11 +10,15 @@
 
 @implementation LARRadarScan
 
+@synthesize scanAlpha;
+
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
+        self.opaque = NO;
+        self.scanAlpha = 0.5;
     }
     return self;
 }
@@ -26,11 +30,17 @@
 {
     // Drawing code
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextScaleCTM(context, 2, 2);
+    //CGContextScaleCTM(context, 2, 2);
     
-    CGContextClearRect(context, CGRectMake(0, 0, self.frame.size.width, self.frame.size.height));
+    CGRect currentEnclosingRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
+    CGContextClearRect(context, currentEnclosingRect);
     
-    UIColor *drawColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:0.4];
+    if (currentEnclosingRect.size.width > 290)
+        self.scanAlpha -= 0.016;
+    else if (currentEnclosingRect.size.width >200)
+        self.scanAlpha -= 0.003;
+    
+    UIColor *drawColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:scanAlpha];
     CGContextSetStrokeColorWithColor(context, drawColor.CGColor);
     
     CGContextSetLineWidth(context, 2.5);

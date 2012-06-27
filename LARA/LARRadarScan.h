@@ -10,4 +10,6 @@
 
 @interface LARRadarScan : UIView
 
+@property (nonatomic) CGFloat scanAlpha;
+
 @end
