@@ -15,10 +15,12 @@
 @property (nonatomic) BOOL shouldAnimateRadar;
 @property (strong, nonatomic) LARRadarScan *radarScan;
 @property (nonatomic, strong) NSTimer *timerForRadar;
+@property (strong, nonatomic) NSFetchedResultsController *resultsController;
 
 - (void)loadBackgroundImage;
 - (void)loadRadarScan;
 - (void)animateRadar;
+- (void)fetchRadarObjects;
 
 @end
 
@@ -29,6 +31,8 @@
 @synthesize radarScan;
 @synthesize radarButton;
 @synthesize timerForRadar;
+@synthesize context;
+@synthesize resultsController;
 
 - (IBAction)radarButtonClicked{
     if (shouldAnimateRadar){
@@ -55,12 +59,12 @@
         [self radarButtonClicked];
     }
     else {
-    temp = CGRectMake(temp.origin.x-1.5, temp.origin.y-1.5, temp.size.width+3, temp.size.height+3);
+    temp = CGRectMake(temp.origin.x-1.8, temp.origin.y-1.8, temp.size.width+3.6, temp.size.height+3.6);
     self.radarScan.frame = temp;
     [self.radarScan setNeedsDisplay];
     
     if (shouldAnimateRadar)
-    timerForRadar = [NSTimer scheduledTimerWithTimeInterval:0.015 target:self selector:@selector(animateRadar) userInfo:nil repeats:NO];
+    timerForRadar = [NSTimer scheduledTimerWithTimeInterval:0.02 target:self selector:@selector(animateRadar) userInfo:nil repeats:NO];
     }
 }
 
@@ -106,8 +110,26 @@
 }
 
 - (void)loadRadarScan{
+    if (self.radarScan) {
+        self.radarScan = nil;
+    }
     self.radarScan = [[LARRadarScan alloc] initWithFrame:CGRectMake(149, 210, 22, 22)];
     [self.view addSubview:radarScan];
+}
+
+- (void)fetchRadarObjects{
+    NSEntityDescription *radarPoints = [NSEntityDescription entityForName:@"TrackedObject" inManagedObjectContext:context];
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:radarPoints];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    [request setSortDescriptors:[NSArray arrayWithObject:sort]];
+    self.resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:context sectionNameKeyPath:nil cacheName:nil];
+    
+    NSError *anyError = nil;
+    [self.resultsController performFetch:&anyError];
+    if (anyError) {
+        //Handle Errors.
+    }
 }
 
 @end
