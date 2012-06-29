@@ -48,23 +48,27 @@
 }
 
 - (void)animateRadar{
-    if (timerForRadar) {
-        [timerForRadar invalidate];
-        self.timerForRadar = nil;
-    }
+//    if (timerForRadar) {
+//        [timerForRadar invalidate];
+//        self.timerForRadar = nil;
+//    }
     
     CGRect temp = self.radarScan.frame;
     
     if (temp.size.width > 360) {
         [self radarButtonClicked];
+        [self.timerForRadar invalidate];
+        self.timerForRadar = nil;
     }
     else {
-    temp = CGRectMake(temp.origin.x-1.8, temp.origin.y-1.8, temp.size.width+3.6, temp.size.height+3.6);
+    temp = CGRectMake(temp.origin.x-2, temp.origin.y-2, temp.size.width+4, temp.size.height+4);
     self.radarScan.frame = temp;
     [self.radarScan setNeedsDisplay];
     
     if (shouldAnimateRadar)
-    timerForRadar = [NSTimer scheduledTimerWithTimeInterval:0.02 target:self selector:@selector(animateRadar) userInfo:nil repeats:NO];
+        if (self.timerForRadar == nil) {
+    timerForRadar = [NSTimer scheduledTimerWithTimeInterval:0.04 target:self selector:@selector(animateRadar) userInfo:nil repeats:YES];
+        }
     }
 }
 
