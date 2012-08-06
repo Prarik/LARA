@@ -24,7 +24,6 @@
 #pragma mark - User Interaction Methods
 - (void)addItem
 {
-//    NSLog(@"%@", @"pressed the add button");
     TrackedObject *trackedObject = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
     trackedObject.name = @"Name";
     trackedObject.subtitle = @"SUB";
@@ -71,11 +70,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
+    
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     [self getData];
@@ -88,8 +83,6 @@
 - (void)viewDidUnload
 {
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -101,14 +94,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     NSInteger counted = [[self.fetchResults sections] count];
     return counted;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchResults sections] objectAtIndex:section];
     NSInteger rowsInSection = [sectionInfo numberOfObjects];
     
@@ -145,15 +136,6 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -170,19 +152,9 @@
     }
 }
 
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
-{
-}
-*/
-
-
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Return NO if you do not want the item to be re-orderable.
     return YES;
 }
 
@@ -191,7 +163,7 @@
     NSMutableArray *things = [[self.fetchResults fetchedObjects] mutableCopy];
     
     // Grab the item we're moving.
-    NSManagedObject *thing = [self.fetchResults objectAtIndexPath:sourceIndexPath];
+    TrackedObject *thing = [self.fetchResults objectAtIndexPath:sourceIndexPath];
     
     // Remove the object we're moving from the array.
     [things removeObject:thing];
@@ -201,9 +173,9 @@
     // All of the objects are now in their correct order. Update each
     // object's displayOrder field by iterating through the array.
     int i = 0;
-    for (NSManagedObject *mo in things)
+    for (TrackedObject *mo in things)
     {
-        [mo setValue:[NSNumber numberWithInt:i++] forKey:@"viewPosition"];
+        mo.viewPosition =  [NSNumber numberWithInt:i++];
     }
     
     [self save];
