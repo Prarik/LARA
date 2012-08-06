@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3744D99E159BA36500CC687F /* LARRadarPointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3744D99D159BA36500CC687F /* LARRadarPointCell.m */; };
+		3744D9A0159BA37B00CC687F /* LARRadarPointCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */; };
 		37F84A851599192D005AA447 /* TrackedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F84A841599192D005AA447 /* TrackedObject.m */; };
 		37FC6B30159905F9000EF93F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B2F159905F9000EF93F /* UIKit.framework */; };
 		37FC6B32159905F9000EF93F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B31159905F9000EF93F /* Foundation.framework */; };
@@ -25,6 +27,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3744D99C159BA36500CC687F /* LARRadarPointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarPointCell.h; sourceTree = "<group>"; };
+		3744D99D159BA36500CC687F /* LARRadarPointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointCell.m; sourceTree = "<group>"; };
+		3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarPointCell.xib; sourceTree = "<group>"; };
 		37F84A831599192D005AA447 /* TrackedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackedObject.h; sourceTree = "<group>"; };
 		37F84A841599192D005AA447 /* TrackedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackedObject.m; sourceTree = "<group>"; };
 		37FC6B2B159905F9000EF93F /* LARA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LARA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,6 +129,7 @@
 			isa = PBXGroup;
 			children = (
 				37FC6B51159907A5000EF93F /* LARRadarView.xib */,
+				3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -163,6 +169,8 @@
 			children = (
 				6F30AA2A159ACB220016DF55 /* LARRadarScan.h */,
 				6F30AA2B159ACB220016DF55 /* LARRadarScan.m */,
+				3744D99C159BA36500CC687F /* LARRadarPointCell.h */,
+				3744D99D159BA36500CC687F /* LARRadarPointCell.m */,
 			);
 			name = Objects;
 			sourceTree = "<group>";
@@ -230,6 +238,7 @@
 				37FC6B3C159905F9000EF93F /* InfoPlist.strings in Resources */,
 				37FC6B53159907A5000EF93F /* LARRadarView.xib in Resources */,
 				6F8571F81599500A0095DFCB /* Radarprac2.png in Resources */,
+				3744D9A0159BA37B00CC687F /* LARRadarPointCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +256,7 @@
 				37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */,
 				37F84A851599192D005AA447 /* TrackedObject.m in Sources */,
 				6F30AA2C159ACB220016DF55 /* LARRadarScan.m in Sources */,
+				3744D99E159BA36500CC687F /* LARRadarPointCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

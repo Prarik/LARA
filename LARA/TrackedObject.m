@@ -17,5 +17,6 @@
 @dynamic iconImageColor;
 @dynamic lat;
 @dynamic lon;
+@dynamic shouldDisplay;
 
 @end

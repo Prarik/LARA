@@ -12,11 +12,12 @@
 
 @interface TrackedObject : NSManagedObject
 
-@property (nonatomic, retain) NSString * name;
-@property (nonatomic, retain) NSString * subtitle;
-@property (nonatomic, retain) NSString * iconImageType;
-@property (nonatomic, retain) NSString * iconImageColor;
-@property (nonatomic, retain) NSNumber * lat;
-@property (nonatomic, retain) NSNumber * lon;
+@property (nonatomic, retain) NSString *name;
+@property (nonatomic, retain) NSString *subtitle;
+@property (nonatomic, retain) NSString *iconImageType;
+@property (nonatomic, retain) NSString *iconImageColor;
+@property (nonatomic, retain) NSNumber *lat;
+@property (nonatomic, retain) NSNumber *lon;
+@property (nonatomic) BOOL shouldDisplay;
 
 @end

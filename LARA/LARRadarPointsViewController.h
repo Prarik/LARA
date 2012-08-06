@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LARRadarPointsViewController : UITableViewController
+@interface LARRadarPointsViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+
+@property (nonatomic, strong) NSManagedObjectContext *context;
+@property (strong, nonatomic) NSFetchedResultsController *fetchResults;
+
+- (void)getData;
 
 @end
