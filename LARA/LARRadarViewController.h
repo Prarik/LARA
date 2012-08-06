@@ -12,6 +12,7 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView *radarScreen;
 @property (nonatomic, strong) IBOutlet UIButton *radarButton;
+@property (nonatomic, strong) NSManagedObjectContext *context;
 
 - (IBAction)radarButtonClicked;
 - (void)stopAnimatingRadar;
