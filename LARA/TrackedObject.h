@@ -18,6 +18,7 @@
 @property (nonatomic, retain) NSString *iconImageColor;
 @property (nonatomic, retain) NSNumber *lat;
 @property (nonatomic, retain) NSNumber *lon;
+@property (nonatomic, retain) NSNumber *viewPosition;
 @property (nonatomic) BOOL shouldDisplay;
 
 @end

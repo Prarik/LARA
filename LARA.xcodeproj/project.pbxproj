@@ -30,6 +30,7 @@
 		3744D99C159BA36500CC687F /* LARRadarPointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarPointCell.h; sourceTree = "<group>"; };
 		3744D99D159BA36500CC687F /* LARRadarPointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointCell.m; sourceTree = "<group>"; };
 		3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarPointCell.xib; sourceTree = "<group>"; };
+		379C5CD715CF64FD00BF3CAB /* LARA-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = file; path = "LARA-2.xcdatamodel"; sourceTree = "<group>"; };
 		37F84A831599192D005AA447 /* TrackedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackedObject.h; sourceTree = "<group>"; };
 		37F84A841599192D005AA447 /* TrackedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackedObject.m; sourceTree = "<group>"; };
 		37FC6B2B159905F9000EF93F /* LARA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LARA.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -370,9 +371,10 @@
 		37FC6B43159905F9000EF93F /* LARA.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				379C5CD715CF64FD00BF3CAB /* LARA-2.xcdatamodel */,
 				37FC6B44159905F9000EF93F /* LARA.xcdatamodel */,
 			);
-			currentVersion = 37FC6B44159905F9000EF93F /* LARA.xcdatamodel */;
+			currentVersion = 379C5CD715CF64FD00BF3CAB /* LARA-2.xcdatamodel */;
 			path = LARA.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

@@ -17,6 +17,7 @@
 @dynamic iconImageColor;
 @dynamic lat;
 @dynamic lon;
+@synthesize viewPosition;
 @dynamic shouldDisplay;
 
 @end

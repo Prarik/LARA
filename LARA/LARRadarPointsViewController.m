@@ -11,6 +11,8 @@
 #import "LARRadarPointCell.h"
 #define kTitle @"Points"
 
+#define kTrackedObject @"TrackedObject"
+
 @interface LARRadarPointsViewController ()
 
 @end
@@ -23,21 +25,15 @@
 - (void)addItem
 {
 //    NSLog(@"%@", @"pressed the add button");
-    TrackedObject *trackedObject = [NSEntityDescription insertNewObjectForEntityForName:@"TrackedObject" inManagedObjectContext:self.context];
+    TrackedObject *trackedObject = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
     trackedObject.name = @"Name";
     trackedObject.subtitle = @"SUB";
     trackedObject.lat = [NSNumber numberWithDouble:41.155484];
     trackedObject.lon = [NSNumber numberWithDouble:-85.138152];
     trackedObject.iconImageColor = @"RED";
     trackedObject.iconImageType = @"START";
-//    trackedObject.shouldDisplay = YES;
     
     [self save];
-}
-
-- (void)editItem
-{
-    
 }
 
 #pragma mark - Core Data
@@ -45,8 +41,8 @@
 - (void)getData
 {
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"TrackedObject" inManagedObjectContext:self.context];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:kTrackedObject inManagedObjectContext:self.context];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"viewPosition" ascending:YES];
     [fetch setFetchBatchSize:20];
     [fetch setEntity:entity];
     [fetch setSortDescriptors:[NSArray arrayWithObject:sort]];
@@ -138,6 +134,7 @@
     if (cell == nil) 
     {
         cell = [[LARRadarPointCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.showsReorderControl = YES;
     }
     
     // Configure the cell...
@@ -170,7 +167,7 @@
     {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         
-    }   
+    }
 }
 
 
@@ -181,26 +178,43 @@
 }
 */
 
-/*
+
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // Return NO if you do not want the item to be re-orderable.
     return YES;
 }
-*/
+
+- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath;
+{
+    NSMutableArray *things = [[self.fetchResults fetchedObjects] mutableCopy];
+    
+    // Grab the item we're moving.
+    NSManagedObject *thing = [self.fetchResults objectAtIndexPath:sourceIndexPath];
+    
+    // Remove the object we're moving from the array.
+    [things removeObject:thing];
+    // Now re-insert it at the destination.
+    [things insertObject:thing atIndex:[destinationIndexPath row]];
+    
+    // All of the objects are now in their correct order. Update each
+    // object's displayOrder field by iterating through the array.
+    int i = 0;
+    for (NSManagedObject *mo in things)
+    {
+        [mo setValue:[NSNumber numberWithInt:i++] forKey:@"viewPosition"];
+    }
+    
+    [self save];
+}
+
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+{   
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate Methods
