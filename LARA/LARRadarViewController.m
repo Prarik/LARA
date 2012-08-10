@@ -8,19 +8,30 @@
 
 #import "LARRadarViewController.h"
 #import "LARRadarScan.h"
+#import "TrackedObject.h"
+#import "LARDisplayObject.h"
+
 #define kTitle @"Sensor"
+#define kLocationDistanceThreshold 100
 
 @interface LARRadarViewController ()
 
 @property (nonatomic) BOOL shouldAnimateRadar;
-@property (strong, nonatomic) LARRadarScan *radarScan;
+@property (nonatomic, strong) LARRadarScan *radarScan;
 @property (nonatomic, strong) NSTimer *timerForRadar;
-@property (strong, nonatomic) NSFetchedResultsController *resultsController;
+@property (nonatomic, strong) NSFetchedResultsController *resultsController;
+@property (nonatomic, strong) NSMutableArray *fetchedObjectsForDisplay;
+@property (nonatomic, strong) NSArray *displayObjects;
+@property (nonatomic, strong) CLLocation *mostRecentLocation;
 
 - (void)loadBackgroundImage;
 - (void)loadRadarScan;
 - (void)animateRadar;
 - (void)fetchRadarObjects;
+- (void)addFetchedObjectsToDisplayArray;
+- (void)prepareObjectsForDisplay;
+- (void)getLocationAndHeading;
+- (void)updateDisplayObjectsWithRadius:(NSUInteger)radarRadius;
 
 @end
 
@@ -33,6 +44,9 @@
 @synthesize timerForRadar;
 @synthesize context;
 @synthesize resultsController;
+@synthesize fetchedObjectsForDisplay;
+@synthesize displayObjects;
+@synthesize mostRecentLocation;
 
 - (IBAction)radarButtonClicked{
     if (shouldAnimateRadar){
@@ -121,6 +135,14 @@
     [self.view addSubview:radarScan];
 }
 
+
+#pragma mark
+#pragma Prepare Display Views
+
+- (void)getLocationAndHeading{
+    
+}
+
 - (void)fetchRadarObjects{
     NSEntityDescription *radarPoints = [NSEntityDescription entityForName:@"TrackedObject" inManagedObjectContext:context];
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
@@ -136,4 +158,59 @@
     }
 }
 
+- (void)addFetchedObjectsToDisplayArray{
+    
+}
+
+- (void)prepareObjectsForDisplay{
+    
+    NSArray *chosenObjects = [self.resultsController fetchedObjects];
+    NSMutableArray *displayObjectsHolder = [[NSMutableArray alloc] init];
+    
+    for (TrackedObject *each in chosenObjects) {
+        CLLocation *trackedObjectsLocation = [[CLLocation alloc] initWithLatitude:[each.lat doubleValue] longitude:[each.lon doubleValue]];
+        CLLocationDistance distanceFromCurrentLocation = [trackedObjectsLocation distanceFromLocation:self.mostRecentLocation];
+        if (distanceFromCurrentLocation < kLocationDistanceThreshold) {
+            // Set up a LARDisplayObject for the radar.
+            LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] init];
+            thisDisplayObject.iconType = each.iconImageType;
+            thisDisplayObject.ticker.text = each.subtitle;
+            
+            [displayObjectsHolder addObject:thisDisplayObject];
+        }
+        self.displayObjects = [displayObjectsHolder copy];
+    }
+}
+
+- (void)updateDisplayObjectsWithRadius:(NSUInteger)radarRadius{
+    NSArray *objectsInDisplay = self.displayObjects;
+    for (LARDisplayObject *each in objectsInDisplay) {
+        [each updateAlphaFromRadarRadius:radarRadius];
+    }
+}
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
