@@ -115,7 +115,6 @@
 			children = (
 				37FC6B4E159906D3000EF93F /* Delegates */,
 				37FC6B4D159906CC000EF93F /* Controllers */,
-				6F30AA28159ACAE00016DF55 /* Objects */,
 				37FC6B4C159906C4000EF93F /* Model */,
 				37FC6B4B159906BF000EF93F /* Views */,
 				37FC6B38159905F9000EF93F /* Supporting Files */,
@@ -150,6 +149,14 @@
 				37FC6B43159905F9000EF93F /* LARA.xcdatamodeld */,
 				37F84A831599192D005AA447 /* TrackedObject.h */,
 				37F84A841599192D005AA447 /* TrackedObject.m */,
+				6F30AA2A159ACB220016DF55 /* LARRadarScan.h */,
+				6F30AA2B159ACB220016DF55 /* LARRadarScan.m */,
+				6F127FF315D5A2AF00ABC44F /* LARCircleIcon.h */,
+				6F127FF415D5A2AF00ABC44F /* LARCircleIcon.m */,
+				3744D99C159BA36500CC687F /* LARRadarPointCell.h */,
+				3744D99D159BA36500CC687F /* LARRadarPointCell.m */,
+				6F052A2B15D37BED00DA9B82 /* LARLocationManager.h */,
+				6F052A2C15D37BED00DA9B82 /* LARLocationManager.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -174,21 +181,6 @@
 				37FC6B41159905F9000EF93F /* LARAppDelegate.m */,
 			);
 			name = Delegates;
-			sourceTree = "<group>";
-		};
-		6F30AA28159ACAE00016DF55 /* Objects */ = {
-			isa = PBXGroup;
-			children = (
-				6F30AA2A159ACB220016DF55 /* LARRadarScan.h */,
-				6F30AA2B159ACB220016DF55 /* LARRadarScan.m */,
-				6F127FF315D5A2AF00ABC44F /* LARCircleIcon.h */,
-				6F127FF415D5A2AF00ABC44F /* LARCircleIcon.m */,
-				3744D99C159BA36500CC687F /* LARRadarPointCell.h */,
-				3744D99D159BA36500CC687F /* LARRadarPointCell.m */,
-				6F052A2B15D37BED00DA9B82 /* LARLocationManager.h */,
-				6F052A2C15D37BED00DA9B82 /* LARLocationManager.m */,
-			);
-			name = Objects;
 			sourceTree = "<group>";
 		};
 		6F8571F315994C060095DFCB /* Images */ = {
