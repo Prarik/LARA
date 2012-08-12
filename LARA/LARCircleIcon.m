@@ -13,7 +13,8 @@
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self) {
+    if (self)
+    {
         // Initialization code
     }
     return self;
@@ -21,17 +22,17 @@
 
 - (void)drawRect:(CGRect)rect
 {
- CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextRef context = UIGraphicsGetCurrentContext();
  
- CGContextSetLineWidth(context, 2.0);
+    CGContextSetLineWidth(context, 2.0);
     
- UIColor *drawColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:self.alpha];
- CGContextSetStrokeColorWithColor(context, drawColor.CGColor);
+    UIColor *drawColor = [UIColor colorWithRed:1 green:0 blue:0 alpha:self.alpha];
+    CGContextSetStrokeColorWithColor(context, drawColor.CGColor);
  
- CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);
+    CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);
     
-CGContextAddEllipseInRect(context, CGRectMake(0, 0, 15, 15));
-CGContextDrawPath(context, kCGPathFillStroke);
+    CGContextAddEllipseInRect(context, CGRectMake(0, 0, 15, 15));
+    CGContextDrawPath(context, kCGPathFillStroke);
 }
 
 

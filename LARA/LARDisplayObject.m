@@ -17,12 +17,15 @@
 
 @synthesize icon, iconType, ticker, isFadingIn;
 
-- (void)updateFrameWithLocation:(CLLocation *)userLocation andHeading:(CLHeading *)userHeading{
+- (void)updateFrameWithLocation:(CLLocation *)userLocation andHeading:(CLHeading *)userHeading
+{
     
 }
 
-- (void)updateAlphaFromRadarRadius:(NSUInteger)radarAnimationRadius{
-    if (isFadingIn) {
+- (void)updateAlphaFromRadarRadius:(NSUInteger)radarAnimationRadius
+{
+    if (isFadingIn)
+    {
         self.view.center;
     }
 }
@@ -30,7 +33,8 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if (self)
+    {
         // Custom initialization
     }
     return self;

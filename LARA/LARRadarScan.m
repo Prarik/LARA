@@ -36,9 +36,13 @@
     CGContextClearRect(context, currentEnclosingRect);
     
     if (currentEnclosingRect.size.width > 290)
+    {
         self.scanAlpha -= 0.026;
+    }
     else if (currentEnclosingRect.size.width >200)
+    {
         self.scanAlpha -= 0.003;
+    }
     
     UIColor *drawColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:scanAlpha];
     CGContextSetStrokeColorWithColor(context, drawColor.CGColor);
