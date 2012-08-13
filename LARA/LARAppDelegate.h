@@ -9,14 +9,14 @@
 #import <UIKit/UIKit.h>
 
 @class LARRadarViewController;
-@class CLLocationManager;
+@class LARLocationManager;
 
 @interface LARAppDelegate : UIResponder <UIApplicationDelegate, UITabBarControllerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
 @property (strong, nonatomic) UITabBarController *rootController;
 @property (strong, nonatomic) LARRadarViewController *radarController;
-@property (strong, nonatomic) CLLocationManager *locationManager;
+@property (strong, nonatomic) LARLocationManager *locationManager;
 
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

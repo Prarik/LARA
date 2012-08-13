@@ -15,49 +15,25 @@
 
 @implementation LARDisplayObject
 
-@synthesize icon, iconType, ticker, isFadingIn;
+@synthesize icon, iconType, ticker, angleFromNorth, isFadingIn;
 
-- (void)updateFrameWithLocation:(CLLocation *)userLocation andHeading:(CLHeading *)userHeading
+- (id)initWithFrame:(CGRect)frame
 {
-    
-}
-
-- (void)updateAlphaFromRadarRadius:(NSUInteger)radarAnimationRadius
-{
-    if (isFadingIn)
-    {
-        self.view.center;
-    }
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
+    self = [super initWithFrame:frame];
     if (self)
     {
-        // Custom initialization
+        // Initialization code
+        self.opaque = NO;
+        self.alpha = 1;
     }
     return self;
 }
 
-- (void)viewDidLoad
+/*
+- (void)drawRect:(CGRect)rect
 {
-    [super viewDidLoad];
-    LARCircleIcon *iconForUse = [[LARCircleIcon alloc] init];
-    self.icon = iconForUse;
-    [self.view addSubview:self.icon];
-	// Do any additional setup after loading the view.
+ 
 }
-
-- (void)viewDidUnload
-{
-    [super viewDidUnload];
-    // Release any retained subviews of the main view.
-}
-
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
-{
-    return (interfaceOrientation == UIInterfaceOrientationPortrait);
-}
+*/
 
 @end

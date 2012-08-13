@@ -9,6 +9,7 @@
 #import "LARAppDelegate.h"
 #import "LARRadarViewController.h"
 #import "LARRadarPointsViewController.h"
+#import "LARLocationManager.h"
 #import <CoreLocation/CoreLocation.h>
 
 @implementation LARAppDelegate
@@ -26,9 +27,11 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     
     [self setUpLocationManager];
+    
     LARRadarViewController *radarController = [[LARRadarViewController alloc] init];
     self.radarController = radarController;
     LARRadarPointsViewController *radarPoints = [[LARRadarPointsViewController alloc] initWithStyle:UITableViewStylePlain];
+    radarController.context = self.managedObjectContext;
     radarPoints.context = self.managedObjectContext;
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:radarPoints];
@@ -41,8 +44,8 @@
     
     self.rootController.viewControllers = controllerArray;
     
-    [self.window addSubview:self.rootController.view];
-    
+    //[self.window addSubview:self.rootController.view];
+    self.window.rootViewController = _rootController;
     
     // Override point for customization after application launch.
     self.window.backgroundColor = [UIColor whiteColor];
@@ -52,9 +55,9 @@
 
 - (void)setUpLocationManager
 {
-    self.locationManager = [[CLLocationManager alloc] init];
-    self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager startUpdatingLocation];
+    self.locationManager = [[LARLocationManager alloc] init];
+    self.locationManager.manager.desiredAccuracy = kCLLocationAccuracyBest;
+    [self.locationManager.manager startUpdatingLocation];
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

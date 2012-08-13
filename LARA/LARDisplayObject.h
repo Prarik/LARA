@@ -8,14 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LARDisplayObject : UIViewController
+@interface LARDisplayObject : UIView
 
 @property (nonatomic, strong) UIView *icon;
 @property (nonatomic, strong) NSString *iconType;
 @property (nonatomic, strong) UILabel *ticker;
+@property (nonatomic, assign) NSNumber *angleFromNorth;
 @property (nonatomic) BOOL isFadingIn;
-
-- (void)updateFrameWithLocation:(CLLocation *)userLocation andHeading:(CLHeading *)userHeading;
-- (void)updateAlphaFromRadarRadius:(NSUInteger)radarAnimationRadius;
 
 @end

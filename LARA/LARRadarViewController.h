@@ -15,6 +15,6 @@
 @property (nonatomic, strong) NSManagedObjectContext *context;
 
 - (IBAction)radarButtonClicked;
-- (void)stopAnimatingRadar;
+- (BOOL)stopAnimatingRadar;
 
 @end

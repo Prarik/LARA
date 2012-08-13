@@ -10,9 +10,21 @@
 #import "LARRadarScan.h"
 #import "TrackedObject.h"
 #import "LARDisplayObject.h"
+#import "LARCircleIcon.h"
+#import "LARAppDelegate.h"
+#import "LARLocationManager.h"
 
 #define kTitle @"Sensor"
-#define kLocationDistanceThreshold 100
+#define kTrackedObject @"TrackedObject"
+
+#define kLocationDistanceThreshold 10000
+#define kFirstRingDistanceThreshold 10
+#define kSecondRingDistanceThreshold 100
+#define kThirdRingDistanceThreshold 500
+#define kLastRingDistanceThreshold 1000
+
+#define kMaximumRadarScan 360
+#define kRadarScanOrigin CGRectMake(149, 170, 22, 22)
 
 @interface LARRadarViewController ()
 
@@ -24,12 +36,17 @@
 @property (nonatomic, strong) NSArray *displayObjects;
 @property (nonatomic, strong) CLLocation *mostRecentLocation;
 
+@property (nonatomic, strong) NSArray *firstRingDisplayObjects;
+@property (nonatomic, strong) NSArray *secondRingDisplayObjects;
+@property (nonatomic, strong) NSArray *thirdRingDisplayObjects;
+@property (nonatomic, strong) NSArray *lastRingDisplayObjects;
+
 - (void)loadBackgroundImage;
 - (void)loadRadarScan;
 - (void)animateRadar;
 - (void)fetchRadarObjects;
-- (void)addFetchedObjectsToDisplayArray;
 - (void)prepareObjectsForDisplay;
+- (void)addDisplayViewsToScreen;
 - (void)getLocationAndHeading;
 - (void)updateDisplayObjectsWithRadius:(NSUInteger)radarRadius;
 
@@ -47,6 +64,10 @@
 @synthesize fetchedObjectsForDisplay;
 @synthesize displayObjects;
 @synthesize mostRecentLocation;
+@synthesize firstRingDisplayObjects;
+@synthesize secondRingDisplayObjects;
+@synthesize thirdRingDisplayObjects;
+@synthesize lastRingDisplayObjects;
 
 - (IBAction)radarButtonClicked
 {
@@ -66,14 +87,15 @@
 
 - (void)animateRadar
 {
-//    if (timerForRadar) {
-//        [timerForRadar invalidate];
-//        self.timerForRadar = nil;
-//    }
+#warning placeholder code for testing
+    [self prepareObjectsForDisplay];
+    return;
     
+// check current size of radar scan
     CGRect temp = self.radarScan.frame;
     
-    if (temp.size.width > 360)
+// end the animation if it has reached a desired maximum size and resize radar if it has not.
+    if (temp.size.width > kMaximumRadarScan)
     {
         [self radarButtonClicked];
         [self.timerForRadar invalidate];
@@ -97,9 +119,10 @@
     }
 }
 
-- (void)stopAnimatingRadar
+- (BOOL)stopAnimatingRadar
 {
     self.shouldAnimateRadar = NO;
+    return YES;
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -118,7 +141,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.shouldAnimateRadar = NO;
-    [self loadBackgroundImage];
+    LARCircleIcon *iconForScan = [[LARCircleIcon alloc] initWithFrame:CGRectMake(152, 98, 16, 16)];
+    [self.view addSubview:iconForScan];
+    //[self loadBackgroundImage];
+    //[self fetchRadarObjects];
+    NSLog(@"%f, %f", iconForScan.center.x, iconForScan.center.y);
 }
 
 - (void)viewDidUnload
@@ -147,7 +174,7 @@
     {
         self.radarScan = nil;
     }
-    self.radarScan = [[LARRadarScan alloc] initWithFrame:CGRectMake(149, 210, 22, 22)];
+    self.radarScan = [[LARRadarScan alloc] initWithFrame:kRadarScanOrigin];
     [self.view addSubview:radarScan];
 }
 
@@ -176,32 +203,139 @@
     }
 }
 
-- (void)addFetchedObjectsToDisplayArray
-{
-    
-}
-
 - (void)prepareObjectsForDisplay
 {
     
-    NSArray *chosenObjects = [self.resultsController fetchedObjects];
-    NSMutableArray *displayObjectsHolder = [[NSMutableArray alloc] init];
+    // NSArray *chosenObjects = [self.resultsController fetchedObjects];
+    
+    ////////////////////////////////////////// INSERT FAKE TRACKED OBJECTS HERE //////////////////////////////////////////
+    LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
+    LARLocationManager *manager = myAppDel.locationManager;
+    self.mostRecentLocation = manager.currentLocation;
+    NSLog(@"For mostRecent %f, %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
+    
+    TrackedObject *one = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
+    one.name = @"Pontiac Sunfire";
+    one.subtitle = @"CSUN";
+    one.iconImageColor = @"orange";
+    one.iconImageType = @"circle";
+    one.lat = [[NSNumber alloc] initWithDouble:41.15778];
+    one.lon = [[NSNumber alloc] initWithDouble:-85.13868];
+    
+    NSArray *chosenObjects = [[NSArray alloc] initWithObjects:one, nil];
+    
+    ////////////////////////////////////////// INSERT FAKE TRACKED OBJECTS HERE //////////////////////////////////////////
+    
+    NSMutableArray *firstDisplayHolder = [[NSMutableArray alloc] init];
+    NSMutableArray *secondDisplayHolder = [[NSMutableArray alloc] init];
+    NSMutableArray *thirdDisplayHolder = [[NSMutableArray alloc] init];
+    NSMutableArray *lastDisplayHolder = [[NSMutableArray alloc] init];
+    NSNumber *currentLocationLat = [NSNumber numberWithDouble:self.mostRecentLocation.coordinate.latitude];
+    NSNumber *currentLocationLon = [NSNumber numberWithDouble:self.mostRecentLocation.coordinate.longitude];
     
     for (TrackedObject *each in chosenObjects)
     {
         CLLocation *trackedObjectsLocation = [[CLLocation alloc] initWithLatitude:[each.lat doubleValue] longitude:[each.lon doubleValue]];
+        //NSLog(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
         CLLocationDistance distanceFromCurrentLocation = [trackedObjectsLocation distanceFromLocation:self.mostRecentLocation];
         if (distanceFromCurrentLocation < kLocationDistanceThreshold)
         {
-            // Set up a LARDisplayObject for the radar.
+            /////////////////////////////////////////////////////////////////////////// Set up a LARDisplayObject.
+            
             LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] init];
             thisDisplayObject.iconType = each.iconImageType;
             thisDisplayObject.ticker.text = each.subtitle;
             
-            [displayObjectsHolder addObject:thisDisplayObject];
+            
+            /////////////////////////////////////////////////////////////////////////// Find the angle from north.
+            
+            NSNumber *changeInLat = [NSNumber numberWithDouble:trackedObjectsLocation.coordinate.latitude-[currentLocationLat doubleValue]];
+            NSNumber *changeInLon = [NSNumber numberWithDouble:trackedObjectsLocation.coordinate.longitude-[currentLocationLon doubleValue]];
+            //NSLog(@"^Lat %f, ^Lon %f", [changeInLat doubleValue], [changeInLon doubleValue]);
+            
+            NSNumber *magnitudeOfChange = [NSNumber numberWithDouble:sqrt( pow( [changeInLat doubleValue] , 2 ) + pow( [changeInLon doubleValue] , 2 ))];
+            //NSLog(@"%f", [magnitudeOfChange doubleValue]);
+            
+            ///// Protect against divison by 0
+            if ([magnitudeOfChange doubleValue] == 0) {
+                magnitudeOfChange = [NSNumber numberWithDouble:0.00001];
+            }
+            
+            ///// Adjust changes to a unit vector in order to find appropriate angle
+            changeInLat = [NSNumber numberWithDouble:[changeInLat doubleValue]/[magnitudeOfChange doubleValue]];
+            changeInLon = [NSNumber numberWithDouble:[changeInLon doubleValue]/[magnitudeOfChange doubleValue]];
+            //NSLog(@"^Lat %f, ^Lon %f", [changeInLat doubleValue], [changeInLon doubleValue]);
+            //NSLog(@"%f", sqrt( pow( [changeInLat doubleValue] , 2 ) + pow( [changeInLon doubleValue] , 2 )));
+            
+            ///// Large if to add up angles from true north
+            {
+                if (( [changeInLat doubleValue] > 0 ) & ( [changeInLon doubleValue] == 0) )
+                {
+                    thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:0];
+                }
+                else if (( [changeInLat doubleValue] > 0 ) & ( [changeInLon doubleValue] > 0) )
+                {
+                    thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:90-acos([changeInLon doubleValue])*(180/M_PI)];
+                }
+                else if (( [changeInLat doubleValue] == 0 ) & ( [changeInLon doubleValue] > 0) )
+                {
+                    thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:90];
+                }
+                else if (( [changeInLat doubleValue] < 0 ) & ( [changeInLon doubleValue] > 0) )
+                {   
+                    thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:acos([changeInLon doubleValue])*(180/M_PI)+90];
+                }
+                else if (( [changeInLat doubleValue] < 0 ) & ( [changeInLon doubleValue] == 0) )
+                {
+                    thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:180];
+                }
+                else if (( [changeInLat doubleValue] < 0 ) & ( [changeInLon doubleValue] < 0) )
+                {
+                    thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:acos([changeInLon doubleValue])*(180/M_PI)+90];
+                }
+                else if (( [changeInLat doubleValue] == 0 ) & ( [changeInLon doubleValue] < 0) )
+                {
+                    thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:270];
+                }
+                else if (( [changeInLat doubleValue] > 0 ) & ( [changeInLon doubleValue] < 0) )
+                {
+                    thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:450-acos([changeInLon doubleValue])*(180/M_PI)];
+                }
+            }
+            
+            /////////////////////////////////////////////////////////////////////////// Sort object into correct holding array.
+            
+            if (distanceFromCurrentLocation < kFirstRingDistanceThreshold)
+            {
+                [firstDisplayHolder addObject:thisDisplayObject];
+            }
+            else if ((distanceFromCurrentLocation < kSecondRingDistanceThreshold) & (distanceFromCurrentLocation >= kFirstRingDistanceThreshold))
+            {
+                [secondDisplayHolder addObject:thisDisplayObject];
+            }
+            else if ((distanceFromCurrentLocation < kThirdRingDistanceThreshold) & (distanceFromCurrentLocation >= kSecondRingDistanceThreshold))
+            {
+                [thirdDisplayHolder addObject:thisDisplayObject];
+            }
+            else if ((distanceFromCurrentLocation < kLastRingDistanceThreshold) & (distanceFromCurrentLocation >= kThirdRingDistanceThreshold))
+            {
+                [lastDisplayHolder addObject:thisDisplayObject];
+            }
+            
         }
-        self.displayObjects = [displayObjectsHolder copy];
     }
+    
+    /////////////////////////////////////////////////////////////////////////// Convert mutable holding arrays into corresponding NSArray properties for the coming animation.
+    
+    self.firstRingDisplayObjects = [firstDisplayHolder copy];
+    self.secondRingDisplayObjects = [secondDisplayHolder copy];
+    self.thirdRingDisplayObjects = [thirdDisplayHolder copy];
+    self.lastRingDisplayObjects = [lastDisplayHolder copy];
+}
+
+- (void)addDisplayViewsToScreen
+{
+    
 }
 
 - (void)updateDisplayObjectsWithRadius:(NSUInteger)radarRadius
@@ -209,7 +343,7 @@
     NSArray *objectsInDisplay = self.displayObjects;
     for (LARDisplayObject *each in objectsInDisplay)
     {
-        [each updateAlphaFromRadarRadius:radarRadius];
+        //[each updateAlphaFromRadarRadius:radarRadius];
     }
 }
 
