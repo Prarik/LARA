@@ -25,6 +25,10 @@
         // Initialization code
         self.opaque = NO;
         self.alpha = 1;
+        self.icon = [[LARCircleIcon alloc] init];
+        self.ticker = [[UILabel alloc] initWithFrame:CGRectMake(0, 18, 16, 10)];
+        [self addSubview:self.ticker];
+        self.ticker.textColor = [UIColor whiteColor];
     }
     return self;
 }

@@ -16,12 +16,19 @@
 
 #define kTitle @"Sensor"
 #define kTrackedObject @"TrackedObject"
+#define kCenterOfRadarX 160
+#define kCenterOfRadarY 180
 
 #define kLocationDistanceThreshold 10000
 #define kFirstRingDistanceThreshold 10
 #define kSecondRingDistanceThreshold 100
 #define kThirdRingDistanceThreshold 500
 #define kLastRingDistanceThreshold 1000
+
+#define kFirstRingMagnitude 35
+#define kSecondRingMagnitude 35
+#define kThirdRingMagnitude 35
+#define kLastRingMagnitude 35
 
 #define kMaximumRadarScan 360
 #define kRadarScanOrigin CGRectMake(149, 170, 22, 22)
@@ -333,9 +340,36 @@
     self.lastRingDisplayObjects = [lastDisplayHolder copy];
 }
 
+#warning VVVVVV
+////// SUBVIEWS ARE ADDED HERE YET THIS METHOD WILL BE CALLED IN A BACKGROUND THREAD - CHANGE WHERE IT IS CALLED OR DISPATCH TO MAIN THREAD.
 - (void)addDisplayViewsToScreen
-{
-    
+{ 
+    LARAppDelegate *appDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
+    NSNumber *magneticHeading = [NSNumber numberWithDouble:appDel.locationManager.currentHeading.magneticHeading];
+    for (LARDisplayObject *each in self.firstRingDisplayObjects) {
+        // Adjust angle from true north by currentHeading to correctly place the view
+        NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
+        each.center = CGPointMake(kCenterOfRadarX+kFirstRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kFirstRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        [self.radarScreen addSubview:each];
+    }
+    for (LARDisplayObject *each in self.secondRingDisplayObjects) {
+        // Adjust angle from true north by currentHeading to correctly place the view
+        NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
+        each.center = CGPointMake(kCenterOfRadarX+kSecondRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kSecondRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        [self.radarScreen addSubview:each];
+    }
+    for (LARDisplayObject *each in self.thirdRingDisplayObjects) {
+        // Adjust angle from true north by currentHeading to correctly place the view
+        NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
+        each.center = CGPointMake(kCenterOfRadarX+kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        [self.radarScreen addSubview:each];
+    }
+    for (LARDisplayObject *each in self.lastRingDisplayObjects) {
+        // Adjust angle from true north by currentHeading to correctly place the view
+        NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
+        each.center = CGPointMake(kCenterOfRadarX+kLastRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kLastRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        [self.radarScreen addSubview:each];
+    }
 }
 
 - (void)updateDisplayObjectsWithRadius:(NSUInteger)radarRadius
