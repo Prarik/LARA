@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
-@interface LARDisplayObject : UIView
+@interface LARDisplayObject : UIViewController
 
 @property (nonatomic, strong) UIView *icon;
 @property (nonatomic, strong) NSString *iconType;
 @property (nonatomic, strong) UILabel *ticker;
-@property (nonatomic, assign) NSNumber *angleFromNorth;
+@property (nonatomic, strong) NSNumber *angleFromNorth;
 @property (nonatomic) BOOL isFadingIn;
 
 @end

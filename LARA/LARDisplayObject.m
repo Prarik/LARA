@@ -17,18 +17,19 @@
 
 @synthesize icon, iconType, ticker, angleFromNorth, isFadingIn;
 
-- (id)initWithFrame:(CGRect)frame
+- (id)init
 {
-    self = [super initWithFrame:frame];
+    self = [super init];
     if (self)
     {
         // Initialization code
-        self.opaque = NO;
-        self.alpha = 1;
-        self.icon = [[LARCircleIcon alloc] init];
+        self.icon = [[LARCircleIcon alloc] initWithFrame:CGRectMake(0, 0, 16, 16)];
+        [self.view addSubview:self.icon];
         self.ticker = [[UILabel alloc] initWithFrame:CGRectMake(0, 18, 16, 10)];
-        [self addSubview:self.ticker];
+        [self.view addSubview:self.ticker];
         self.ticker.textColor = [UIColor whiteColor];
+        self.angleFromNorth = [NSNumber numberWithDouble:0];
+        [self.view setNeedsDisplay];
     }
     return self;
 }

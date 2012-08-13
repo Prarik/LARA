@@ -17,18 +17,18 @@
 #define kTitle @"Sensor"
 #define kTrackedObject @"TrackedObject"
 #define kCenterOfRadarX 160
-#define kCenterOfRadarY 180
+#define kCenterOfRadarY 186
 
-#define kLocationDistanceThreshold 10000
+#define kLocationDistanceThreshold 100000
 #define kFirstRingDistanceThreshold 10
 #define kSecondRingDistanceThreshold 100
 #define kThirdRingDistanceThreshold 500
-#define kLastRingDistanceThreshold 1000
+#define kLastRingDistanceThreshold 100000
 
 #define kFirstRingMagnitude 35
-#define kSecondRingMagnitude 35
-#define kThirdRingMagnitude 35
-#define kLastRingMagnitude 35
+#define kSecondRingMagnitude 75
+#define kThirdRingMagnitude 115
+#define kLastRingMagnitude 155
 
 #define kMaximumRadarScan 360
 #define kRadarScanOrigin CGRectMake(149, 170, 22, 22)
@@ -55,6 +55,7 @@
 - (void)prepareObjectsForDisplay;
 - (void)addDisplayViewsToScreen;
 - (void)getLocationAndHeading;
+- (void)removeAllRadarPoints;
 
 @end
 
@@ -81,12 +82,13 @@
     {
         self.shouldAnimateRadar = NO;
         [self.radarScan removeFromSuperview];
+        [self removeAllRadarPoints];
         self.radarScan = nil;
     }
     else
     {
         self.shouldAnimateRadar = YES;
-        [self loadRadarScan];
+        //[self loadRadarScan];
         [self animateRadar];
     }
 }
@@ -95,6 +97,7 @@
 {
 #warning placeholder code for testing
     [self prepareObjectsForDisplay];
+    [self addDisplayViewsToScreen];
     return;
     
 // check current size of radar scan
@@ -147,7 +150,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.shouldAnimateRadar = NO;
-    LARCircleIcon *iconForScan = [[LARCircleIcon alloc] initWithFrame:CGRectMake(152, 98, 16, 16)];
+    LARCircleIcon *iconForScan = [[LARCircleIcon alloc] initWithFrame:CGRectMake(152, 98, 16, 16)]; // 152, 98, 16, 16
     [self.view addSubview:iconForScan];
     //[self loadBackgroundImage];
     //[self fetchRadarObjects];
@@ -218,7 +221,7 @@
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     LARLocationManager *manager = myAppDel.locationManager;
     self.mostRecentLocation = manager.currentLocation;
-    NSLog(@"For mostRecent %f, %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
+    NSLog(@"For mostRecent Lat = %f, Lon = %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
     
     TrackedObject *one = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
     one.name = @"Pontiac Sunfire";
@@ -249,6 +252,8 @@
             /////////////////////////////////////////////////////////////////////////// Set up a LARDisplayObject.
             
             LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] init];
+            thisDisplayObject.view.frame = CGRectMake(0, 0, 16, 28);
+            thisDisplayObject.view.bounds = CGRectMake(0, 0, 16, 28);
             thisDisplayObject.iconType = each.iconImageType;
             thisDisplayObject.ticker.text = each.subtitle;
             
@@ -306,6 +311,7 @@
                 else if (( [changeInLat doubleValue] > 0 ) & ( [changeInLon doubleValue] < 0) )
                 {
                     thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:450-acos([changeInLon doubleValue])*(180/M_PI)];
+                    NSLog(@"Object's Angle From North = %f", [thisDisplayObject.angleFromNorth doubleValue]);
                 }
             }
             
@@ -350,33 +356,71 @@
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.center = CGPointMake(kCenterOfRadarX+kFirstRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kFirstRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
-        [self.radarScreen addSubview:each];
+        each.view.center = CGPointMake(kCenterOfRadarX+kFirstRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kFirstRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        [self.view addSubview:each.view];
     }
      
     for (LARDisplayObject *each in self.secondRingDisplayObjects) 
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.center = CGPointMake(kCenterOfRadarX+kSecondRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kSecondRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
-        [self.radarScreen addSubview:each];
+        each.view.center = CGPointMake(kCenterOfRadarX+kSecondRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kSecondRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        [self.view addSubview:each.view];
     }
      
     for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
     {
         // Adjust angle from true north by currentHeading to correctly place the view
+        NSLog(@"Magnetic Heading = %d, Angle of Object From North = %d", [magneticHeading intValue], [each.angleFromNorth intValue]); //, (360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360);
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.center = CGPointMake(kCenterOfRadarX+kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
-        [self.radarScreen addSubview:each];
+        NSLog(@"Adjusted Heading = %f", [adjustedHeading doubleValue]);
+        
+        each.view.center = CGPointMake(kCenterOfRadarX+kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        
+        
+        NSLog(@"Sin: %f,Cos: %f", sin(M_PI/180*[adjustedHeading doubleValue]), cos(M_PI/180*[adjustedHeading doubleValue]));
+        NSLog(@"Sin wMag: %f,Cos wMag: %f", kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        NSLog(@"Object view X Coord = %f, Object View Y Coord = %f", each.view.center.x, each.view.center.y);
+        NSLog(@"--");
+        NSLog(@"--");
+        NSLog(@"--");
+        [self.view addSubview:each.view];
     }
      
     for (LARDisplayObject *each in self.lastRingDisplayObjects) 
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.center = CGPointMake(kCenterOfRadarX+kLastRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kLastRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
-        [self.radarScreen addSubview:each];
+        each.view.center = CGPointMake(kCenterOfRadarX+kLastRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kLastRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        [self.view addSubview:each.view];
     }
+}
+
+- (void)removeAllRadarPoints{
+    for (LARDisplayObject *each in self.firstRingDisplayObjects) 
+    {
+        [each.view removeFromSuperview];
+    }
+    
+    for (LARDisplayObject *each in self.secondRingDisplayObjects) 
+    {
+        [each.view removeFromSuperview];
+    }
+    
+    for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
+    {
+        [each.view removeFromSuperview];
+    }
+    
+    for (LARDisplayObject *each in self.lastRingDisplayObjects) 
+    {
+        [each.view removeFromSuperview];
+    }
+    
+    self.firstRingDisplayObjects = nil;
+    self.secondRingDisplayObjects = nil;
+    self.thirdRingDisplayObjects = nil;
+    self.lastRingDisplayObjects = nil;
 }
 
 @end
