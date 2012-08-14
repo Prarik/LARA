@@ -356,7 +356,8 @@
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.view.center = CGPointMake(kCenterOfRadarX+kFirstRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kFirstRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        
+        each.view.center = CGPointMake(kCenterOfRadarX+kFirstRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kFirstRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         [self.view addSubview:each.view];
     }
      
@@ -364,7 +365,7 @@
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.view.center = CGPointMake(kCenterOfRadarX+kSecondRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kSecondRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        each.view.center = CGPointMake(kCenterOfRadarX+kSecondRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kSecondRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         [self.view addSubview:each.view];
     }
      
@@ -374,7 +375,6 @@
         NSLog(@"Magnetic Heading = %d, Angle of Object From North = %d", [magneticHeading intValue], [each.angleFromNorth intValue]); //, (360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360);
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
         NSLog(@"Adjusted Heading = %f", [adjustedHeading doubleValue]);
-        
         each.view.center = CGPointMake(kCenterOfRadarX+kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         
         
@@ -391,7 +391,7 @@
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.view.center = CGPointMake(kCenterOfRadarX+kLastRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY+kLastRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        each.view.center = CGPointMake(kCenterOfRadarX+kLastRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kLastRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         [self.view addSubview:each.view];
     }
 }
