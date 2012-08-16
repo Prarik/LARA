@@ -13,5 +13,8 @@
 @property (nonatomic, strong) CLLocationManager *manager;
 @property (nonatomic, strong) CLLocation *currentLocation;
 @property (nonatomic, strong) CLHeading *currentHeading;
+@property (nonatomic) CLLocationAccuracy currentVerticalAccuracy;
+@property (nonatomic) CLLocationAccuracy currentHorizontalAccuracy;
+@property (nonatomic) BOOL hasInitializedPosition;
 
 @end

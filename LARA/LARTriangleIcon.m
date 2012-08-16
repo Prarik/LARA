@@ -1,14 +1,14 @@
 //
-//  LARCircleIcon.m
+//  LARTriangleIcon.m
 //  LARA
 //
-//  Created by Brian Thomas on 8/10/12.
+//  Created by Brian Thomas on 8/15/12.
 //  Copyright (c) 2012 Endozemedia. All rights reserved.
 //
 
-#import "LARCircleIcon.h"
+#import "LARTriangleIcon.h"
 
-@implementation LARCircleIcon
+@implementation LARTriangleIcon
 
 @synthesize drawColor;
 
@@ -48,7 +48,7 @@
         // Initialization code
         self.opaque = NO;
         self.alpha = 1;
-        self.drawColor = [UIColor redColor];
+        self.drawColor = [UIColor blueColor];
     }
     return self;
 }
@@ -56,7 +56,7 @@
 - (void)drawRect:(CGRect)rect
 {
     CGContextRef context = UIGraphicsGetCurrentContext();
- 
+    
     CGContextSetLineWidth(context, 2.0);
     
     CGRect currentEnclosingRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
@@ -64,12 +64,16 @@
     
     UIColor *currentColor = self.drawColor;
     CGContextSetStrokeColorWithColor(context, currentColor.CGColor);
- 
     CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);
     
-    CGContextAddEllipseInRect(context, CGRectMake(1, 1, 14, 14));
+    //CGRectMake(2, 2, 12, 12));
+    CGContextMoveToPoint(context, 2, 14);
+    CGContextAddLineToPoint(context, 8, 2);
+    CGContextAddLineToPoint(context, 14, 14);
+    CGContextAddLineToPoint(context, 2, 14);
+    CGContextAddLineToPoint(context, 8, 2);
+    
     CGContextDrawPath(context, kCGPathFillStroke);
 }
-
 
 @end

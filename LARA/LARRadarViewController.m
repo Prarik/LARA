@@ -11,6 +11,7 @@
 #import "TrackedObject.h"
 #import "LARDisplayObject.h"
 #import "LARCircleIcon.h"
+#import "LARSquareIcon.h"
 #import "LARAppDelegate.h"
 #import "LARLocationManager.h"
 
@@ -20,12 +21,12 @@
 #define kCenterOfRadarY 186
 
 #define kLocationDistanceThreshold 100000
-#define kFirstRingDistanceThreshold 10
+#define kFirstRingDistanceThreshold 12
 #define kSecondRingDistanceThreshold 100
-#define kThirdRingDistanceThreshold 500
+#define kThirdRingDistanceThreshold 400
 #define kLastRingDistanceThreshold 100000
 
-#define kFirstRingMagnitude 35
+#define kFirstRingMagnitude 40
 #define kSecondRingMagnitude 75
 #define kThirdRingMagnitude 115
 #define kLastRingMagnitude 155
@@ -56,6 +57,7 @@
 - (void)addDisplayViewsToScreen;
 - (void)getLocationAndHeading;
 - (void)removeAllRadarPoints;
+- (void)setUpAndAnimate;
 
 @end
 
@@ -84,21 +86,27 @@
         [self.radarScan removeFromSuperview];
         [self removeAllRadarPoints];
         self.radarScan = nil;
+        [self.timerForRadar invalidate];
+        self.timerForRadar = nil;
     }
     else
     {
         self.shouldAnimateRadar = YES;
-        //[self loadRadarScan];
-        [self animateRadar];
+        [self setUpAndAnimate];
     }
+}
+
+- (void)setUpAndAnimate
+{
+    [self prepareObjectsForDisplay];
+    [self addDisplayViewsToScreen];
+    [self loadRadarScan];
+    [self animateRadar];
+    return;
 }
 
 - (void)animateRadar
 {
-#warning placeholder code for testing
-    [self prepareObjectsForDisplay];
-    [self addDisplayViewsToScreen];
-    return;
     
 // check current size of radar scan
     CGRect temp = self.radarScan.frame;
@@ -107,8 +115,6 @@
     if (temp.size.width > kMaximumRadarScan)
     {
         [self radarButtonClicked];
-        [self.timerForRadar invalidate];
-        self.timerForRadar = nil;
     }
     else
     {
@@ -117,6 +123,7 @@
         [self.radarScan setNeedsDisplay];
     
         if (shouldAnimateRadar)
+        {
             if (self.timerForRadar == nil)
             {
                 timerForRadar = [NSTimer scheduledTimerWithTimeInterval:0.04
@@ -124,13 +131,23 @@
                                                                selector:@selector(animateRadar)
                                                                userInfo:nil
                                                                 repeats:YES];
+            }
         }
     }
 }
 
 - (BOOL)stopAnimatingRadar
 {
-    self.shouldAnimateRadar = NO;
+    if (shouldAnimateRadar) 
+    {
+        self.shouldAnimateRadar = NO;
+        [self removeAllRadarPoints];
+        [self.radarScan removeFromSuperview];
+        self.radarScan = nil;
+        [self.timerForRadar invalidate];
+        self.timerForRadar = nil;
+        self.resultsController = nil;
+    }
     return YES;
 }
 
@@ -150,11 +167,8 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.shouldAnimateRadar = NO;
-    LARCircleIcon *iconForScan = [[LARCircleIcon alloc] initWithFrame:CGRectMake(152, 98, 16, 16)]; // 152, 98, 16, 16
-    [self.view addSubview:iconForScan];
-    //[self loadBackgroundImage];
     //[self fetchRadarObjects];
-    NSLog(@"%f, %f", iconForScan.center.x, iconForScan.center.y);
+    //NSLog(@"%f, %f", iconForScan.center.x, iconForScan.center.y);
 }
 
 - (void)viewDidUnload
@@ -215,7 +229,7 @@
 - (void)prepareObjectsForDisplay
 {
     
-    // NSArray *chosenObjects = [self.resultsController fetchedObjects];
+    //NSArray *chosenObjects = [self.resultsController fetchedObjects];
     
     ////////////////////////////////////////// INSERT FAKE TRACKED OBJECTS HERE //////////////////////////////////////////
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
@@ -225,13 +239,29 @@
     
     TrackedObject *one = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
     one.name = @"Pontiac Sunfire";
-    one.subtitle = @"CSUN";
-    one.iconImageColor = @"orange";
-    one.iconImageType = @"circle";
+    one.subtitle = @"PSUN";
+    one.iconImageColor = @"red";
+    one.iconImageType = @"triangle";
     one.lat = [[NSNumber alloc] initWithDouble:41.15778];
     one.lon = [[NSNumber alloc] initWithDouble:-85.13868];
     
-    NSArray *chosenObjects = [[NSArray alloc] initWithObjects:one, nil];
+    TrackedObject *two = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
+    two.name = @"Television";
+    two.subtitle = @"HMTV";
+    two.iconImageColor = @"yellow";
+    two.iconImageType = @"square";
+    two.lat = [[NSNumber alloc] initWithDouble:41.15578];
+    two.lon = [[NSNumber alloc] initWithDouble:-85.13768];
+    
+    TrackedObject *three = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
+    three.name = @"Tree";
+    three.subtitle = @"TREE";
+    three.iconImageColor = @"cyan";
+    three.iconImageType = @"circle";
+    three.lat = [[NSNumber alloc] initWithDouble:41.15498];
+    three.lon = [[NSNumber alloc] initWithDouble:-85.13789];
+    
+    NSArray *chosenObjects = [[NSArray alloc] initWithObjects:one, two, three, nil];
     
     ////////////////////////////////////////// INSERT FAKE TRACKED OBJECTS HERE //////////////////////////////////////////
     
@@ -247,15 +277,17 @@
         CLLocation *trackedObjectsLocation = [[CLLocation alloc] initWithLatitude:[each.lat doubleValue] longitude:[each.lon doubleValue]];
         //NSLog(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
         CLLocationDistance distanceFromCurrentLocation = [trackedObjectsLocation distanceFromLocation:self.mostRecentLocation];
+        NSLog(@"distance from %@: %f", each.name , distanceFromCurrentLocation);
         if (distanceFromCurrentLocation < kLocationDistanceThreshold)
         {
             /////////////////////////////////////////////////////////////////////////// Set up a LARDisplayObject.
             
-            LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] init];
-            thisDisplayObject.view.frame = CGRectMake(0, 0, 16, 28);
-            thisDisplayObject.view.bounds = CGRectMake(0, 0, 16, 28);
+            LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] initWithShape:each.iconImageType andColor:each.iconImageColor];
+            thisDisplayObject.view.frame = CGRectMake(0, 0, 20, 29);
+            thisDisplayObject.view.bounds = CGRectMake(0, 0, 20, 29);
             thisDisplayObject.iconType = each.iconImageType;
             thisDisplayObject.ticker.text = each.subtitle;
+            thisDisplayObject.view.alpha = 1;
             
             
             /////////////////////////////////////////////////////////////////////////// Find the angle from north.

@@ -8,6 +8,8 @@
 
 #import "LARDisplayObject.h"
 #import "LARCircleIcon.h"
+#import "LARSquareIcon.h"
+#import "LARTriangleIcon.h"
 
 @interface LARDisplayObject ()
 
@@ -17,17 +19,53 @@
 
 @synthesize icon, iconType, ticker, angleFromNorth, isFadingIn;
 
+- (id)initWithShape:(NSString *)shapeName andColor:(NSString *)colorName
+{
+    self = [super init];
+    if (self)
+    {
+        // Initialization code
+        if (shapeName == @"circle") 
+        {
+            self.icon = [[LARCircleIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
+            [self.view addSubview:self.icon];
+        }
+        else if (shapeName == @"square")
+        {
+            self.icon = [[LARSquareIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
+            [self.view addSubview:self.icon];
+        }
+        else if (shapeName == @"triangle")
+        {
+            self.icon = [[LARTriangleIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
+            [self.view addSubview:self.icon];
+        }
+        self.ticker = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, 20, 12)];
+        [self.view addSubview:self.ticker];
+        self.ticker.textColor = [UIColor whiteColor];
+        self.ticker.backgroundColor = [UIColor clearColor];
+        self.ticker.font = [UIFont systemFontOfSize:7];
+        self.ticker.textAlignment = UITextAlignmentCenter;
+        self.angleFromNorth = [NSNumber numberWithDouble:0];
+        [self.view setNeedsDisplay];
+    }
+    return self;
+}
+
 - (id)init
 {
     self = [super init];
     if (self)
     {
         // Initialization code
-        self.icon = [[LARCircleIcon alloc] initWithFrame:CGRectMake(0, 0, 16, 16)];
+        self.icon = [[LARCircleIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16)];
         [self.view addSubview:self.icon];
-        self.ticker = [[UILabel alloc] initWithFrame:CGRectMake(0, 18, 16, 10)];
+        self.ticker = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, 20, 12)];
         [self.view addSubview:self.ticker];
         self.ticker.textColor = [UIColor whiteColor];
+        self.ticker.backgroundColor = [UIColor clearColor];
+        self.ticker.font = [UIFont systemFontOfSize:7];
+        self.ticker.textAlignment = UITextAlignmentCenter;
         self.angleFromNorth = [NSNumber numberWithDouble:0];
         [self.view setNeedsDisplay];
     }

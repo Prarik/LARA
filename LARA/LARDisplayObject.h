@@ -16,4 +16,6 @@
 @property (nonatomic, strong) NSNumber *angleFromNorth;
 @property (nonatomic) BOOL isFadingIn;
 
+- (id)initWithShape:(NSString *)shapeName andColor:(NSString *)colorName;
+
 @end

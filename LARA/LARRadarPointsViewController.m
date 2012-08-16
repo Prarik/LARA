@@ -9,30 +9,41 @@
 #import "LARRadarPointsViewController.h"
 #import "TrackedObject.h"
 #import "LARRadarPointCell.h"
+#import "LARAddPointViewController.h"
+#import "LARCircleIcon.h"
+#import "LARSquareIcon.h"
+#import "LARTriangleIcon.h"
+#import "LARLocationManager.h"
+
 #define kTitle @"Points"
 
 #define kTrackedObject @"TrackedObject"
 
 @interface LARRadarPointsViewController ()
 
+- (IBAction)cellUpdateButtonTapped:(id)sender;
+- (IBAction)cellDisplayRemoveButtonTapped:(id)sender;
+- (void)addButtonPressed;
+- (UIView *)iconForCellOfTrackedObject:(TrackedObject *)currentObject;
+
 @end
 
 @implementation LARRadarPointsViewController
 @synthesize context = _context;
 @synthesize fetchResults = _fetchResults;
+@synthesize addItemController;
+@synthesize manager = _manager;
 
 #pragma mark - User Interaction Methods
-- (void)addItem
+
+- (void)addButtonPressed
 {
-    TrackedObject *trackedObject = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
-    trackedObject.name = @"Name";
-    trackedObject.subtitle = @"SUB";
-    trackedObject.lat = [NSNumber numberWithDouble:41.155484];
-    trackedObject.lon = [NSNumber numberWithDouble:-85.138152];
-    trackedObject.iconImageColor = @"RED";
-    trackedObject.iconImageType = @"START";
-    
-    [self save];
+    if (self.addItemController == nil) 
+    {
+        self.addItemController = [[LARAddPointViewController alloc] initWithNibName:@"LARAddPointViewController" bundle:nil];
+        self.addItemController.delegate = self;
+    }
+    [self.navigationController pushViewController:self.addItemController animated:YES];
 }
 
 #pragma mark - Core Data
@@ -74,7 +85,7 @@
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     [self getData];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addItem)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed)];
     
     [self.tableView setRowHeight:92];
     
@@ -133,7 +144,46 @@
     cell.nameLabel.text = currentTrackedObject.name;
     cell.subLabel.text = currentTrackedObject.subtitle;
     
+    // Add the appropriate selectors to the buttons
+    UIView *update = [cell viewWithTag:1];
+    UIButton *updateButton = (UIButton *)update;
+    [updateButton addTarget:self action:@selector(cellUpdateButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView *displayAndRemove = [cell viewWithTag:2];
+    UIButton *displayRemoveButton = (UIButton *)displayAndRemove;
+    [displayRemoveButton addTarget:self action:@selector(cellDisplayRemoveButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [displayRemoveButton setTitle:@"Display" forState:UIControlStateNormal];
+    
+    // Remove the old icon
+    [[cell viewWithTag:4] removeFromSuperview];
+    
+    // Create a new icon
+    UIView *viewToAdd = [self iconForCellOfTrackedObject:currentTrackedObject];
+    [viewToAdd setTag:4];
+    
+    // Add icon to cell
+    UIView *customIconSuperView = [cell viewWithTag:3];
+    [customIconSuperView addSubview:viewToAdd];
+    
     return cell;
+}
+
+- (UIView *)iconForCellOfTrackedObject:(TrackedObject *)currentObject
+{
+    UIView *viewToAdd;
+    if ([currentObject.iconImageType isEqualToString:@"circle"]) 
+    {
+        viewToAdd = [[LARCircleIcon alloc] initWithFrame:CGRectMake(0, 0, 16, 16) andColor:currentObject.iconImageColor];
+    }
+    else if ([currentObject.iconImageType isEqualToString:@"square"])
+    {
+        viewToAdd = [[LARSquareIcon alloc] initWithFrame:CGRectMake(0, 0, 16, 16) andColor:currentObject.iconImageColor];
+    }
+    else if ([currentObject.iconImageType isEqualToString:@"triangle"])
+    {
+        viewToAdd = [[LARTriangleIcon alloc] initWithFrame:CGRectMake(0, 0, 16, 16) andColor:currentObject.iconImageColor];
+    }
+    return viewToAdd;
 }
 
 // Override to support editing the table view.
@@ -186,7 +236,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {   
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    return;
 }
 
 #pragma mark - NSFetchedResultsControllerDelegate Methods
@@ -239,6 +289,52 @@
         NSLog(@"ERROR: %@", [error localizedDescription]);
     }
     
+}
+
+#pragma mark - LARAddItemDelegate Methods
+
+- (void)addUsersItem
+{
+    TrackedObject *trackedObject = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
+    trackedObject.name = addItemController.thisName;
+    trackedObject.subtitle = addItemController.thisTicker;
+    trackedObject.lat = [NSNumber numberWithDouble:40.0];
+    trackedObject.lon = [NSNumber numberWithDouble:-80.2];
+    trackedObject.iconImageColor = addItemController.thisColor;
+    trackedObject.iconImageType = addItemController.thisShape;
+    trackedObject.shouldDisplay = [NSNumber numberWithBool:YES];
+    
+    [self save];
+
+    self.addItemController = nil;
+}
+
+#pragma mark - Manipulating TableViewCell With Tags
+
+- (IBAction)cellUpdateButtonTapped:(id)sender
+{
+    // Find the row of the button tapped.
+    UIButton *senderButton = (UIButton *)sender;
+    UITableViewCell *buttonCell = (UITableViewCell *)[senderButton superview];
+    NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
+    
+    // Get the tracked Object associated with it and update it's location.
+    TrackedObject *objectForRow = [self.fetchResults objectAtIndexPath:indexPathForButton];
+    CLLocation *gottenLocation = self.manager.currentLocation;
+    objectForRow.lat = [NSNumber numberWithDouble:gottenLocation.coordinate.latitude];
+    objectForRow.lon = [NSNumber numberWithDouble:gottenLocation.coordinate.longitude];
+    [self save];
+    
+    // Display the accuracy to the user.
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Updated" message:[NSString stringWithFormat:@"With Horizonal Accuracy: %d \n And Vertical Accuracy: %d", (int)self.manager.currentHorizontalAccuracy, (int)self.manager.currentVerticalAccuracy] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+}
+
+- (IBAction)cellDisplayRemoveButtonTapped:(id)sender
+{
+    UIButton *senderButton = (UIButton *)sender;
+    UITableViewCell *buttonCell = (UITableViewCell *)[senderButton superview];
+    NSUInteger buttonRow = [[self.tableView indexPathForCell:buttonCell] row];
 }
 
 @end

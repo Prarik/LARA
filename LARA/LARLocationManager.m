@@ -10,7 +10,7 @@
 
 @implementation LARLocationManager
 
-@synthesize manager, currentLocation, currentHeading;
+@synthesize manager, currentLocation, currentHeading, hasInitializedPosition, currentVerticalAccuracy, currentHorizontalAccuracy;
 
 - (id) init
 {
@@ -24,12 +24,23 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
+    static int count = 0;
+    count += 1;
     self.currentLocation = newLocation;
+    self.currentVerticalAccuracy = newLocation.verticalAccuracy;
+    self.currentHorizontalAccuracy = newLocation.horizontalAccuracy;
+    NSLog(@"horizontal location accuracy: %f", newLocation.horizontalAccuracy);
+    NSLog(@"%u", (int)newLocation.horizontalAccuracy);
+    if ((newLocation.verticalAccuracy < 20) & (newLocation.horizontalAccuracy < 20))
+    {
+       // NSLog(@"%d", count);
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     self.currentHeading = newHeading;
+   // NSLog(@"heading accuracy: %f", newHeading.headingAccuracy);
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status

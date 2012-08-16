@@ -2,7 +2,7 @@
 //  TrackedObject.m
 //  LARA
 //
-//  Created by Chris Stephan on 6/25/12.
+//  Created by Brian Thomas on 8/16/12.
 //  Copyright (c) 2012 Endozemedia. All rights reserved.
 //
 
@@ -11,13 +11,13 @@
 
 @implementation TrackedObject
 
-@dynamic name;
-@dynamic subtitle;
-@dynamic iconImageType;
 @dynamic iconImageColor;
+@dynamic iconImageType;
 @dynamic lat;
 @dynamic lon;
-@synthesize viewPosition;
+@dynamic name;
+@dynamic subtitle;
+@dynamic viewPosition;
 @dynamic shouldDisplay;
 
 @end

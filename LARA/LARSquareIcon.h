@@ -1,14 +1,14 @@
 //
-//  LARCircleIcon.h
+//  LARSquareIcon.h
 //  LARA
 //
-//  Created by Brian Thomas on 8/10/12.
+//  Created by Brian Thomas on 8/14/12.
 //  Copyright (c) 2012 Endozemedia. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface LARCircleIcon : UIView
+@interface LARSquareIcon : UIView
 
 @property (nonatomic, strong) UIColor *drawColor;
 

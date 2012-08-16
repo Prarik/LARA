@@ -33,6 +33,7 @@
     LARRadarPointsViewController *radarPoints = [[LARRadarPointsViewController alloc] initWithStyle:UITableViewStylePlain];
     radarController.context = self.managedObjectContext;
     radarPoints.context = self.managedObjectContext;
+    radarPoints.manager = self.locationManager;
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:radarPoints];
     navController.navigationBar.tintColor = [UIColor blackColor];

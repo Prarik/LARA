@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3744D99E159BA36500CC687F /* LARRadarPointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3744D99D159BA36500CC687F /* LARRadarPointCell.m */; };
 		3744D9A0159BA37B00CC687F /* LARRadarPointCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */; };
-		37F84A851599192D005AA447 /* TrackedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 37F84A841599192D005AA447 /* TrackedObject.m */; };
 		37FC6B30159905F9000EF93F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B2F159905F9000EF93F /* UIKit.framework */; };
 		37FC6B32159905F9000EF93F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B31159905F9000EF93F /* Foundation.framework */; };
 		37FC6B34159905F9000EF93F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B33159905F9000EF93F /* CoreGraphics.framework */; };
@@ -24,9 +23,15 @@
 		6F052A2915D379EB00DA9B82 /* LARDisplayObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F052A2815D379EB00DA9B82 /* LARDisplayObject.m */; };
 		6F052A2D15D37BED00DA9B82 /* LARLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F052A2C15D37BED00DA9B82 /* LARLocationManager.m */; };
 		6F127FF515D5A2AF00ABC44F /* LARCircleIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F127FF415D5A2AF00ABC44F /* LARCircleIcon.m */; };
+		6F2A42A815DC63CD007E9E4F /* LARTriangleIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2A42A715DC63CD007E9E4F /* LARTriangleIcon.m */; };
+		6F2A42AC15DC89B2007E9E4F /* LARCircleForTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2A42AB15DC89B2007E9E4F /* LARCircleForTable.m */; };
+		6F2A42B315DCACC0007E9E4F /* TrackedObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F2A42B215DCACC0007E9E4F /* TrackedObject.m */; };
 		6F30AA2C159ACB220016DF55 /* LARRadarScan.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F30AA2B159ACB220016DF55 /* LARRadarScan.m */; };
 		6F30AA2E159ACE460016DF55 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6F30AA2D159ACE460016DF55 /* CoreLocation.framework */; };
 		6F8571F81599500A0095DFCB /* Radarprac2.png in Resources */ = {isa = PBXBuildFile; fileRef = 6F8571F71599500A0095DFCB /* Radarprac2.png */; };
+		6F8B849715DA04F900D3EBAB /* LARSquareIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F8B849615DA04F900D3EBAB /* LARSquareIcon.m */; };
+		6FF72EA215DC22F40019FC7F /* LARAddPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF72EA015DC22F40019FC7F /* LARAddPointViewController.m */; };
+		6FF72EA315DC22F40019FC7F /* LARAddPointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FF72EA115DC22F40019FC7F /* LARAddPointViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,8 +39,6 @@
 		3744D99D159BA36500CC687F /* LARRadarPointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointCell.m; sourceTree = "<group>"; };
 		3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarPointCell.xib; sourceTree = "<group>"; };
 		379C5CD715CF64FD00BF3CAB /* LARA-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LARA-2.xcdatamodel"; sourceTree = "<group>"; };
-		37F84A831599192D005AA447 /* TrackedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackedObject.h; sourceTree = "<group>"; };
-		37F84A841599192D005AA447 /* TrackedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackedObject.m; sourceTree = "<group>"; };
 		37FC6B2B159905F9000EF93F /* LARA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LARA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37FC6B2F159905F9000EF93F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		37FC6B31159905F9000EF93F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -59,10 +62,21 @@
 		6F052A2C15D37BED00DA9B82 /* LARLocationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARLocationManager.m; sourceTree = "<group>"; };
 		6F127FF315D5A2AF00ABC44F /* LARCircleIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARCircleIcon.h; sourceTree = "<group>"; };
 		6F127FF415D5A2AF00ABC44F /* LARCircleIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARCircleIcon.m; sourceTree = "<group>"; };
+		6F2A42A615DC63CD007E9E4F /* LARTriangleIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARTriangleIcon.h; sourceTree = "<group>"; };
+		6F2A42A715DC63CD007E9E4F /* LARTriangleIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARTriangleIcon.m; sourceTree = "<group>"; };
+		6F2A42AA15DC89B2007E9E4F /* LARCircleForTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARCircleForTable.h; sourceTree = "<group>"; };
+		6F2A42AB15DC89B2007E9E4F /* LARCircleForTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARCircleForTable.m; sourceTree = "<group>"; };
+		6F2A42B115DCACC0007E9E4F /* TrackedObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TrackedObject.h; sourceTree = "<group>"; };
+		6F2A42B215DCACC0007E9E4F /* TrackedObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TrackedObject.m; sourceTree = "<group>"; };
 		6F30AA2A159ACB220016DF55 /* LARRadarScan.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarScan.h; sourceTree = "<group>"; };
 		6F30AA2B159ACB220016DF55 /* LARRadarScan.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarScan.m; sourceTree = "<group>"; };
 		6F30AA2D159ACE460016DF55 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		6F8571F71599500A0095DFCB /* Radarprac2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Radarprac2.png; sourceTree = "<group>"; };
+		6F8B849515DA04F900D3EBAB /* LARSquareIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARSquareIcon.h; sourceTree = "<group>"; };
+		6F8B849615DA04F900D3EBAB /* LARSquareIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARSquareIcon.m; sourceTree = "<group>"; };
+		6FF72E9F15DC22F40019FC7F /* LARAddPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARAddPointViewController.h; sourceTree = "<group>"; };
+		6FF72EA015DC22F40019FC7F /* LARAddPointViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARAddPointViewController.m; sourceTree = "<group>"; };
+		6FF72EA115DC22F40019FC7F /* LARAddPointViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARAddPointViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +153,19 @@
 			children = (
 				37FC6B51159907A5000EF93F /* LARRadarView.xib */,
 				3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */,
+				6FF72EA115DC22F40019FC7F /* LARAddPointViewController.xib */,
+				3744D99C159BA36500CC687F /* LARRadarPointCell.h */,
+				3744D99D159BA36500CC687F /* LARRadarPointCell.m */,
+				6F2A42AA15DC89B2007E9E4F /* LARCircleForTable.h */,
+				6F2A42AB15DC89B2007E9E4F /* LARCircleForTable.m */,
+				6F127FF315D5A2AF00ABC44F /* LARCircleIcon.h */,
+				6F127FF415D5A2AF00ABC44F /* LARCircleIcon.m */,
+				6F8B849515DA04F900D3EBAB /* LARSquareIcon.h */,
+				6F8B849615DA04F900D3EBAB /* LARSquareIcon.m */,
+				6F2A42A615DC63CD007E9E4F /* LARTriangleIcon.h */,
+				6F2A42A715DC63CD007E9E4F /* LARTriangleIcon.m */,
+				6F30AA2A159ACB220016DF55 /* LARRadarScan.h */,
+				6F30AA2B159ACB220016DF55 /* LARRadarScan.m */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -147,14 +174,8 @@
 			isa = PBXGroup;
 			children = (
 				37FC6B43159905F9000EF93F /* LARA.xcdatamodeld */,
-				37F84A831599192D005AA447 /* TrackedObject.h */,
-				37F84A841599192D005AA447 /* TrackedObject.m */,
-				6F30AA2A159ACB220016DF55 /* LARRadarScan.h */,
-				6F30AA2B159ACB220016DF55 /* LARRadarScan.m */,
-				6F127FF315D5A2AF00ABC44F /* LARCircleIcon.h */,
-				6F127FF415D5A2AF00ABC44F /* LARCircleIcon.m */,
-				3744D99C159BA36500CC687F /* LARRadarPointCell.h */,
-				3744D99D159BA36500CC687F /* LARRadarPointCell.m */,
+				6F2A42B115DCACC0007E9E4F /* TrackedObject.h */,
+				6F2A42B215DCACC0007E9E4F /* TrackedObject.m */,
 				6F052A2B15D37BED00DA9B82 /* LARLocationManager.h */,
 				6F052A2C15D37BED00DA9B82 /* LARLocationManager.m */,
 			);
@@ -168,6 +189,8 @@
 				37FC6B50159907A5000EF93F /* LARRadarViewController.m */,
 				37FC6B541599084A000EF93F /* LARRadarPointsViewController.h */,
 				37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */,
+				6FF72E9F15DC22F40019FC7F /* LARAddPointViewController.h */,
+				6FF72EA015DC22F40019FC7F /* LARAddPointViewController.m */,
 				6F052A2715D379EB00DA9B82 /* LARDisplayObject.h */,
 				6F052A2815D379EB00DA9B82 /* LARDisplayObject.m */,
 			);
@@ -247,6 +270,7 @@
 				37FC6B53159907A5000EF93F /* LARRadarView.xib in Resources */,
 				6F8571F81599500A0095DFCB /* Radarprac2.png in Resources */,
 				3744D9A0159BA37B00CC687F /* LARRadarPointCell.xib in Resources */,
+				6FF72EA315DC22F40019FC7F /* LARAddPointViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,12 +286,16 @@
 				37FC6B45159905F9000EF93F /* LARA.xcdatamodeld in Sources */,
 				37FC6B52159907A5000EF93F /* LARRadarViewController.m in Sources */,
 				37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */,
-				37F84A851599192D005AA447 /* TrackedObject.m in Sources */,
 				6F30AA2C159ACB220016DF55 /* LARRadarScan.m in Sources */,
 				3744D99E159BA36500CC687F /* LARRadarPointCell.m in Sources */,
 				6F052A2915D379EB00DA9B82 /* LARDisplayObject.m in Sources */,
 				6F052A2D15D37BED00DA9B82 /* LARLocationManager.m in Sources */,
 				6F127FF515D5A2AF00ABC44F /* LARCircleIcon.m in Sources */,
+				6F8B849715DA04F900D3EBAB /* LARSquareIcon.m in Sources */,
+				6FF72EA215DC22F40019FC7F /* LARAddPointViewController.m in Sources */,
+				6F2A42A815DC63CD007E9E4F /* LARTriangleIcon.m in Sources */,
+				6F2A42AC15DC89B2007E9E4F /* LARCircleForTable.m in Sources */,
+				6F2A42B315DCACC0007E9E4F /* TrackedObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

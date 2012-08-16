@@ -2,7 +2,7 @@
 //  TrackedObject.h
 //  LARA
 //
-//  Created by Chris Stephan on 6/25/12.
+//  Created by Brian Thomas on 8/16/12.
 //  Copyright (c) 2012 Endozemedia. All rights reserved.
 //
 
@@ -12,13 +12,13 @@
 
 @interface TrackedObject : NSManagedObject
 
-@property (nonatomic, retain) NSString *name;
-@property (nonatomic, retain) NSString *subtitle;
-@property (nonatomic, retain) NSString *iconImageType;
-@property (nonatomic, retain) NSString *iconImageColor;
-@property (nonatomic, retain) NSNumber *lat;
-@property (nonatomic, retain) NSNumber *lon;
-@property (nonatomic, retain) NSNumber *viewPosition;
-@property (nonatomic) BOOL shouldDisplay;
+@property (nonatomic, retain) NSString * iconImageColor;
+@property (nonatomic, retain) NSString * iconImageType;
+@property (nonatomic, retain) NSNumber * lat;
+@property (nonatomic, retain) NSNumber * lon;
+@property (nonatomic, retain) NSString * name;
+@property (nonatomic, retain) NSString * subtitle;
+@property (nonatomic, retain) NSNumber * viewPosition;
+@property (nonatomic, retain) NSNumber * shouldDisplay;
 
 @end

@@ -7,11 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LARAddPointViewController.h"
 
-@interface LARRadarPointsViewController : UITableViewController <NSFetchedResultsControllerDelegate>
+@class LARAddPointViewController;
+@class LARLocationManager;
+
+@interface LARRadarPointsViewController : UITableViewController <NSFetchedResultsControllerDelegate, LARAddPointViewDelegate>
 
 @property (nonatomic, strong) NSManagedObjectContext *context;
-@property (strong, nonatomic) NSFetchedResultsController *fetchResults;
+@property (nonatomic, strong) NSFetchedResultsController *fetchResults;
+@property (nonatomic, strong) LARAddPointViewController *addItemController;
+@property (nonatomic, strong) LARLocationManager *manager;
 
 - (void)getData;
 
