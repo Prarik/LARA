@@ -167,6 +167,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     self.shouldAnimateRadar = NO;
+    [self fetchRadarObjects];
     //[self fetchRadarObjects];
     //NSLog(@"%f, %f", iconForScan.center.x, iconForScan.center.y);
 }
@@ -229,39 +230,39 @@
 - (void)prepareObjectsForDisplay
 {
     
-    //NSArray *chosenObjects = [self.resultsController fetchedObjects];
+    NSArray *chosenObjects = [self.resultsController fetchedObjects];
     
     ////////////////////////////////////////// INSERT FAKE TRACKED OBJECTS HERE //////////////////////////////////////////
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     LARLocationManager *manager = myAppDel.locationManager;
     self.mostRecentLocation = manager.currentLocation;
-    NSLog(@"For mostRecent Lat = %f, Lon = %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
-    
-    TrackedObject *one = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
-    one.name = @"Pontiac Sunfire";
-    one.subtitle = @"PSUN";
-    one.iconImageColor = @"red";
-    one.iconImageType = @"triangle";
-    one.lat = [[NSNumber alloc] initWithDouble:41.15778];
-    one.lon = [[NSNumber alloc] initWithDouble:-85.13868];
-    
-    TrackedObject *two = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
-    two.name = @"Television";
-    two.subtitle = @"HMTV";
-    two.iconImageColor = @"yellow";
-    two.iconImageType = @"square";
-    two.lat = [[NSNumber alloc] initWithDouble:41.15578];
-    two.lon = [[NSNumber alloc] initWithDouble:-85.13768];
-    
-    TrackedObject *three = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
-    three.name = @"Tree";
-    three.subtitle = @"TREE";
-    three.iconImageColor = @"cyan";
-    three.iconImageType = @"circle";
-    three.lat = [[NSNumber alloc] initWithDouble:41.15498];
-    three.lon = [[NSNumber alloc] initWithDouble:-85.13789];
-    
-    NSArray *chosenObjects = [[NSArray alloc] initWithObjects:one, two, three, nil];
+//    NSLog(@"For mostRecent Lat = %f, Lon = %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
+//    
+//    TrackedObject *one = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
+//    one.name = @"Pontiac Sunfire";
+//    one.subtitle = @"PSUN";
+//    one.iconImageColor = @"red";
+//    one.iconImageType = @"triangle";
+//    one.lat = [[NSNumber alloc] initWithDouble:41.15778];
+//    one.lon = [[NSNumber alloc] initWithDouble:-85.13868];
+//    
+//    TrackedObject *two = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
+//    two.name = @"Television";
+//    two.subtitle = @"HMTV";
+//    two.iconImageColor = @"yellow";
+//    two.iconImageType = @"square";
+//    two.lat = [[NSNumber alloc] initWithDouble:41.15578];
+//    two.lon = [[NSNumber alloc] initWithDouble:-85.13768];
+//    
+//    TrackedObject *three = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
+//    three.name = @"Tree";
+//    three.subtitle = @"TREE";
+//    three.iconImageColor = @"cyan";
+//    three.iconImageType = @"circle";
+//    three.lat = [[NSNumber alloc] initWithDouble:41.15498];
+//    three.lon = [[NSNumber alloc] initWithDouble:-85.13789];
+//    
+//    NSArray *chosenObjects = [[NSArray alloc] initWithObjects:one, two, three, nil];
     
     ////////////////////////////////////////// INSERT FAKE TRACKED OBJECTS HERE //////////////////////////////////////////
     
@@ -271,9 +272,11 @@
     NSMutableArray *lastDisplayHolder = [[NSMutableArray alloc] init];
     NSNumber *currentLocationLat = [NSNumber numberWithDouble:self.mostRecentLocation.coordinate.latitude];
     NSNumber *currentLocationLon = [NSNumber numberWithDouble:self.mostRecentLocation.coordinate.longitude];
+    NSLog(@"%f", [currentLocationLat doubleValue]);
     
     for (TrackedObject *each in chosenObjects)
     {
+        NSLog(@"%f", [each.lat doubleValue]);
         CLLocation *trackedObjectsLocation = [[CLLocation alloc] initWithLatitude:[each.lat doubleValue] longitude:[each.lon doubleValue]];
         //NSLog(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
         CLLocationDistance distanceFromCurrentLocation = [trackedObjectsLocation distanceFromLocation:self.mostRecentLocation];
@@ -285,7 +288,6 @@
             LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] initWithShape:each.iconImageType andColor:each.iconImageColor];
             thisDisplayObject.view.frame = CGRectMake(0, 0, 20, 29);
             thisDisplayObject.view.bounds = CGRectMake(0, 0, 20, 29);
-            thisDisplayObject.iconType = each.iconImageType;
             thisDisplayObject.ticker.text = each.subtitle;
             thisDisplayObject.view.alpha = 1;
             

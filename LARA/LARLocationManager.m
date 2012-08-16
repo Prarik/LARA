@@ -29,8 +29,8 @@
     self.currentLocation = newLocation;
     self.currentVerticalAccuracy = newLocation.verticalAccuracy;
     self.currentHorizontalAccuracy = newLocation.horizontalAccuracy;
-    NSLog(@"horizontal location accuracy: %f", newLocation.horizontalAccuracy);
-    NSLog(@"%u", (int)newLocation.horizontalAccuracy);
+    //NSLog(@"horizontal location accuracy: %f", newLocation.horizontalAccuracy);
+    //NSLog(@"%u", (int)newLocation.horizontalAccuracy);
     if ((newLocation.verticalAccuracy < 20) & (newLocation.horizontalAccuracy < 20))
     {
        // NSLog(@"%d", count);

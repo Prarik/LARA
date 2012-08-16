@@ -14,6 +14,7 @@
 #import "LARSquareIcon.h"
 #import "LARTriangleIcon.h"
 #import "LARLocationManager.h"
+#import "LARRadarPointCell.h"
 
 #define kTitle @"Points"
 
@@ -33,6 +34,7 @@
 @synthesize fetchResults = _fetchResults;
 @synthesize addItemController;
 @synthesize manager = _manager;
+@synthesize currentTable;
 
 #pragma mark - User Interaction Methods
 
@@ -136,7 +138,8 @@
     if (cell == nil) 
     {
         cell = [[LARRadarPointCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.showsReorderControl = YES;
+        cell.showsReorderControl = NO;
+        self.currentTable = tableView;
     }
     
     // Configure the cell...
@@ -205,7 +208,7 @@
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return YES;
+    return NO;
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath;
@@ -315,13 +318,24 @@
 {
     // Find the row of the button tapped.
     UIButton *senderButton = (UIButton *)sender;
-    UITableViewCell *buttonCell = (UITableViewCell *)[senderButton superview];
+    NSLog(@"%@", [senderButton titleForState:UIControlStateNormal]);
+    
+    LARRadarPointCell *buttonCell = (LARRadarPointCell *)[[senderButton superview] superview];
+    NSLog(@"%@", buttonCell.reuseIdentifier);
+    
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
+    NSLog(@"%u", indexPathForButton.row);
     
     // Get the tracked Object associated with it and update it's location.
     TrackedObject *objectForRow = [self.fetchResults objectAtIndexPath:indexPathForButton];
+    NSLog(@"%@", objectForRow.name);
     CLLocation *gottenLocation = self.manager.currentLocation;
-    objectForRow.lat = [NSNumber numberWithDouble:gottenLocation.coordinate.latitude];
+    NSLog(@"off CLLocation %f", self.manager.currentLocation.coordinate.latitude);
+    NSNumber *numberForLat = [[NSNumber alloc] initWithDouble:gottenLocation.coordinate.latitude];
+    NSLog(@"off the NSNumber %f", [numberForLat doubleValue]);
+    [objectForRow setLat:numberForLat];
+    [self save];
+    NSLog(@"off Object %f", [objectForRow.lat floatValue]);
     objectForRow.lon = [NSNumber numberWithDouble:gottenLocation.coordinate.longitude];
     [self save];
     

@@ -18,6 +18,7 @@
 @property (nonatomic, strong) NSFetchedResultsController *fetchResults;
 @property (nonatomic, strong) LARAddPointViewController *addItemController;
 @property (nonatomic, strong) LARLocationManager *manager;
+@property (nonatomic, strong) IBOutlet UITableView *currentTable;
 
 - (void)getData;
 
