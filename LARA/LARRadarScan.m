@@ -35,13 +35,13 @@
     CGRect currentEnclosingRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     CGContextClearRect(context, currentEnclosingRect);
     
-    if (currentEnclosingRect.size.width > 290)
+    if (currentEnclosingRect.size.width > 310)
     {
-        self.scanAlpha -= 0.026;
+        self.scanAlpha -= 0.04;
     }
     else if (currentEnclosingRect.size.width >200)
     {
-        self.scanAlpha -= 0.003;
+        self.scanAlpha -= 0.004;
     }
     
     UIColor *drawColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:scanAlpha];

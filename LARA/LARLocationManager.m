@@ -18,6 +18,7 @@
     {
         self.manager = [[CLLocationManager alloc] init];
         self.manager.delegate = self;
+        self.hasInitializedPosition = NO;
     }
     return self;
 }
@@ -29,18 +30,21 @@
     self.currentLocation = newLocation;
     self.currentVerticalAccuracy = newLocation.verticalAccuracy;
     self.currentHorizontalAccuracy = newLocation.horizontalAccuracy;
-    NSLog(@"horizontal location accuracy: %f", newLocation.horizontalAccuracy);
-    NSLog(@"%u", (int)newLocation.horizontalAccuracy);
-    if ((newLocation.verticalAccuracy < 20) & (newLocation.horizontalAccuracy < 20))
+    
+    //NSLog(@"horizontal location accuracy: %f", newLocation.horizontalAccuracy);
+    //NSLog(@"%u", (int)newLocation.horizontalAccuracy);
+    
+    if ((newLocation.verticalAccuracy < 40) & (newLocation.horizontalAccuracy < 40) & !hasInitializedPosition)
     {
-       // NSLog(@"%d", count);
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"locationInitialized" object:self];
+        self.hasInitializedPosition = YES;
     }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     self.currentHeading = newHeading;
-   // NSLog(@"heading accuracy: %f", newHeading.headingAccuracy);
+    //NSLog(@"%f", newHeading.magneticHeading);
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status

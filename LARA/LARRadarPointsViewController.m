@@ -152,7 +152,14 @@
     UIView *displayAndRemove = [cell viewWithTag:2];
     UIButton *displayRemoveButton = (UIButton *)displayAndRemove;
     [displayRemoveButton addTarget:self action:@selector(cellDisplayRemoveButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [displayRemoveButton setTitle:@"Display" forState:UIControlStateNormal];
+    if ([currentTrackedObject.shouldDisplay boolValue]) 
+    {
+        [displayRemoveButton setTitle:@"Display" forState:UIControlStateNormal];
+    }
+    else 
+    {
+        [displayRemoveButton setTitle:@"Hide" forState:UIControlStateNormal];
+    }
     
     // Remove the old icon
     [[cell viewWithTag:4] removeFromSuperview];
@@ -295,11 +302,12 @@
 
 - (void)addUsersItem
 {
+    CLLocation *gottenLocation = self.manager.currentLocation;
     TrackedObject *trackedObject = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
     trackedObject.name = addItemController.thisName;
     trackedObject.subtitle = addItemController.thisTicker;
-    trackedObject.lat = [NSNumber numberWithDouble:40.0];
-    trackedObject.lon = [NSNumber numberWithDouble:-80.2];
+    trackedObject.lat = [NSNumber numberWithDouble:gottenLocation.coordinate.latitude];
+    trackedObject.lon = [NSNumber numberWithDouble:gottenLocation.coordinate.longitude];
     trackedObject.iconImageColor = addItemController.thisColor;
     trackedObject.iconImageType = addItemController.thisShape;
     trackedObject.shouldDisplay = [NSNumber numberWithBool:YES];
@@ -317,10 +325,11 @@
     UIButton *senderButton = (UIButton *)sender;
     UITableViewCell *buttonCell = (UITableViewCell *)[senderButton superview];
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
-    
+    NSLog(@"%u", [indexPathForButton row]);
     // Get the tracked Object associated with it and update it's location.
     TrackedObject *objectForRow = [self.fetchResults objectAtIndexPath:indexPathForButton];
     CLLocation *gottenLocation = self.manager.currentLocation;
+    NSLog(@"%f %@", gottenLocation.coordinate.latitude, objectForRow.name);
     objectForRow.lat = [NSNumber numberWithDouble:gottenLocation.coordinate.latitude];
     objectForRow.lon = [NSNumber numberWithDouble:gottenLocation.coordinate.longitude];
     [self save];
@@ -333,8 +342,19 @@
 - (IBAction)cellDisplayRemoveButtonTapped:(id)sender
 {
     UIButton *senderButton = (UIButton *)sender;
-    UITableViewCell *buttonCell = (UITableViewCell *)[senderButton superview];
-    NSUInteger buttonRow = [[self.tableView indexPathForCell:buttonCell] row];
+    UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
+    NSIndexPath *buttonRow = [self.tableView indexPathForCell:buttonCell];
+    TrackedObject *thisRowsObject = [self.fetchResults objectAtIndexPath:buttonRow];
+    if ([thisRowsObject.shouldDisplay boolValue]) 
+    {
+        thisRowsObject.shouldDisplay = [NSNumber numberWithBool:NO];
+    }
+    else 
+    {
+        thisRowsObject.shouldDisplay = [NSNumber numberWithBool:YES];
+    }
+    [self save];
+    [self.tableView beginUpdates];
 }
 
 @end

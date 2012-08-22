@@ -25,17 +25,17 @@
     if (self)
     {
         // Initialization code
-        if (shapeName == @"circle") 
+        if ([shapeName isEqualToString:@"circle"]) 
         {
             self.icon = [[LARCircleIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
             [self.view addSubview:self.icon];
         }
-        else if (shapeName == @"square")
+        else if ([shapeName isEqualToString:@"square"])
         {
             self.icon = [[LARSquareIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
             [self.view addSubview:self.icon];
         }
-        else if (shapeName == @"triangle")
+        else if ([shapeName isEqualToString:@"triangle"])
         {
             self.icon = [[LARTriangleIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
             [self.view addSubview:self.icon];
