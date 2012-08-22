@@ -57,7 +57,7 @@
 - (void)setUpLocationManager
 {
     self.locationManager = [[LARLocationManager alloc] init];
-    self.locationManager.manager.desiredAccuracy = kCLLocationAccuracyBest;
+    self.locationManager.manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application

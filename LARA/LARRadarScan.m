@@ -35,7 +35,7 @@
     CGRect currentEnclosingRect = CGRectMake(0, 0, self.frame.size.width, self.frame.size.height);
     CGContextClearRect(context, currentEnclosingRect);
     
-    if (currentEnclosingRect.size.width > 310)
+    if (currentEnclosingRect.size.width > 320)
     {
         self.scanAlpha -= 0.04;
     }

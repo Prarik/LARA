@@ -31,7 +31,7 @@
 #define kThirdRingMagnitude 115
 #define kLastRingMagnitude 155
 
-#define kMaximumRadarScan 360
+#define kMaximumRadarScan 480
 #define kRadarScanOrigin CGRectMake(149, 180, 22, 22)
 
 @interface LARRadarViewController ()
@@ -187,7 +187,7 @@
             self.radarScan = nil;
             [self.timerForRadar invalidate];
             self.timerForRadar = nil;
-            [NSTimer scheduledTimerWithTimeInterval:2
+            [NSTimer scheduledTimerWithTimeInterval:1
                                              target:self
                                            selector:@selector(radarButtonClicked)
                                            userInfo:nil
@@ -255,10 +255,10 @@
     }
     if (([magnitude doubleValue] > 70) & !([magnitude doubleValue] > 110)) 
     {
-        for (LARDisplayObject *each in self.firstRingDisplayObjects) 
-        {
-            each.view.alpha -=0.06;
-        }
+//        for (LARDisplayObject *each in self.firstRingDisplayObjects) 
+//        {
+//            each.view.alpha -=0.06;
+//        }
         for (LARDisplayObject *each in self.secondRingDisplayObjects) 
         {
             each.view.alpha +=0.1;
@@ -266,29 +266,29 @@
     }
     if (([magnitude doubleValue] > 110) & !([magnitude doubleValue] > 150)) 
     {
-        for (LARDisplayObject *each in self.firstRingDisplayObjects) 
-        {
-            each.view.alpha -=0.06;
-        }
-        for (LARDisplayObject *each in self.secondRingDisplayObjects) 
-        {
-            each.view.alpha -=0.08;
-        }
+//        for (LARDisplayObject *each in self.firstRingDisplayObjects) 
+//        {
+//            each.view.alpha -=0.06;
+//        }
+//        for (LARDisplayObject *each in self.secondRingDisplayObjects) 
+//        {
+//            each.view.alpha -=0.08;
+//        }
         for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
         {
             each.view.alpha +=0.1;
         }
     }
-    if (([magnitude doubleValue] > 150) & !([magnitude doubleValue] > 190)) 
+    if (([magnitude doubleValue] > 150) & !([magnitude doubleValue] > 180)) 
     {
-        for (LARDisplayObject *each in self.secondRingDisplayObjects) 
-        {
-            each.view.alpha -=0.08;
-        }
-        for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
-        {
-            each.view.alpha -=0.09;
-        }
+//        for (LARDisplayObject *each in self.secondRingDisplayObjects) 
+//        {
+//            each.view.alpha -=0.08;
+//        }
+//        for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
+//        {
+//            each.view.alpha -=0.09;
+//        }
         for (LARDisplayObject *each in self.lastRingDisplayObjects) 
         {
             each.view.alpha +=0.1;
@@ -298,19 +298,19 @@
     {
         for (LARDisplayObject *each in self.firstRingDisplayObjects) 
         {
-            each.view.alpha -=0.1;
+            each.view.alpha -=0.06;
         }
         for (LARDisplayObject *each in self.secondRingDisplayObjects) 
         {
-            each.view.alpha -=0.1;
+            each.view.alpha -=0.06;
         }
         for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
         {
-            each.view.alpha -=0.1;
+            each.view.alpha -=0.06;
         }
         for (LARDisplayObject *each in self.lastRingDisplayObjects) 
         {
-            each.view.alpha -=0.1;
+            each.view.alpha -=0.06;
         }
     }
 }
@@ -396,7 +396,7 @@
         NSLog(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
         CLLocationDistance distanceFromCurrentLocation = [trackedObjectsLocation distanceFromLocation:self.mostRecentLocation];
         NSLog(@"distance from %@: %f", each.name , distanceFromCurrentLocation);
-        if (distanceFromCurrentLocation < kLocationDistanceThreshold)
+        if ((distanceFromCurrentLocation < kLocationDistanceThreshold) & ([each.shouldDisplay boolValue]))
         {
             /////////////////////////////////////////////////////////////////////////// Set up a LARDisplayObject.
             

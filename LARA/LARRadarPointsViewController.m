@@ -154,11 +154,11 @@
     [displayRemoveButton addTarget:self action:@selector(cellDisplayRemoveButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
     if ([currentTrackedObject.shouldDisplay boolValue]) 
     {
-        [displayRemoveButton setTitle:@"Display" forState:UIControlStateNormal];
+        [displayRemoveButton setTitle:@"Hide" forState:UIControlStateNormal];
     }
     else 
     {
-        [displayRemoveButton setTitle:@"Hide" forState:UIControlStateNormal];
+        [displayRemoveButton setTitle:@"Display" forState:UIControlStateNormal];
     }
     
     // Remove the old icon
@@ -323,19 +323,19 @@
 {
     // Find the row of the button tapped.
     UIButton *senderButton = (UIButton *)sender;
-    UITableViewCell *buttonCell = (UITableViewCell *)[senderButton superview];
+    UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
     NSLog(@"%u", [indexPathForButton row]);
     // Get the tracked Object associated with it and update it's location.
     TrackedObject *objectForRow = [self.fetchResults objectAtIndexPath:indexPathForButton];
     CLLocation *gottenLocation = self.manager.currentLocation;
     NSLog(@"%f %@", gottenLocation.coordinate.latitude, objectForRow.name);
-    objectForRow.lat = [NSNumber numberWithDouble:gottenLocation.coordinate.latitude];
-    objectForRow.lon = [NSNumber numberWithDouble:gottenLocation.coordinate.longitude];
+    objectForRow.lat = [NSNumber numberWithFloat:gottenLocation.coordinate.latitude];
+    objectForRow.lon = [NSNumber numberWithFloat:gottenLocation.coordinate.longitude];
     [self save];
     
     // Display the accuracy to the user.
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Updated" message:[NSString stringWithFormat:@"With Horizonal Accuracy: %d \n And Vertical Accuracy: %d", (int)self.manager.currentHorizontalAccuracy, (int)self.manager.currentVerticalAccuracy] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Updated" message:[NSString stringWithFormat:@"With an accuracy of %d meters", (int)self.manager.currentHorizontalAccuracy, (int)self.manager.currentVerticalAccuracy] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
 }
 
@@ -354,7 +354,7 @@
         thisRowsObject.shouldDisplay = [NSNumber numberWithBool:YES];
     }
     [self save];
-    [self.tableView beginUpdates];
+    [self.tableView reloadData];
 }
 
 @end
