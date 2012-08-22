@@ -44,7 +44,7 @@
         [self.view addSubview:self.ticker];
         self.ticker.textColor = [UIColor whiteColor];
         self.ticker.backgroundColor = [UIColor clearColor];
-        self.ticker.font = [UIFont systemFontOfSize:7];
+        self.ticker.font = [UIFont systemFontOfSize:6];
         self.ticker.textAlignment = UITextAlignmentCenter;
         self.angleFromNorth = [NSNumber numberWithDouble:0];
         [self.view setNeedsDisplay];

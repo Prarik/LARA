@@ -57,8 +57,7 @@
 - (void)setUpLocationManager
 {
     self.locationManager = [[LARLocationManager alloc] init];
-    self.locationManager.manager.desiredAccuracy = kCLLocationAccuracyBest;
-    [self.locationManager.manager startUpdatingLocation];
+    self.locationManager.manager.desiredAccuracy = kCLLocationAccuracyBestForNavigation;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -194,9 +193,30 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    [self.radarController stopAnimatingRadar];
+    if (viewController == self.radarController) 
+    {
+        // do nada
+    }
+    else
+    {
+        [self.radarController tabBarWillMakeInactive];
+    }
     
+//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Can't do that" delegate:self cancelButtonTitle:@"OK." otherButtonTitles:nil];
+//    [alert show];
     return YES;
+}
+
+- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+{
+    if (viewController == self.radarController) 
+    {
+        [self.radarController tabBarDidMakeActive];
+    }
+    else 
+    {
+        // do nada
+    }
 }
 
 @end

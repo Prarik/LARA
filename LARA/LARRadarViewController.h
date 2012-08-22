@@ -12,9 +12,15 @@
 
 @property (nonatomic, strong) IBOutlet UIImageView *radarScreen;
 @property (nonatomic, strong) IBOutlet UIButton *radarButton;
+@property (nonatomic, strong) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (nonatomic, strong) NSManagedObjectContext *context;
+@property (strong, nonatomic) IBOutlet UILabel *locationAccuracyLabel;
+@property (strong, nonatomic) IBOutlet UILabel *headingAccuracyLabel;
+@property (strong, nonatomic) IBOutlet UILabel *aquiringDesiredAccuracyLabel;
+@property (nonatomic) BOOL isTheActiveScreen;
 
 - (IBAction)radarButtonClicked;
-- (BOOL)stopAnimatingRadar;
+- (BOOL)tabBarWillMakeInactive;
+- (void)tabBarDidMakeActive;
 
 @end
