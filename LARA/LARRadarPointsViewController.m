@@ -325,11 +325,11 @@
     UIButton *senderButton = (UIButton *)sender;
     UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
-    NSLog(@"%u", [indexPathForButton row]);
+//    NSLog(@"%u", [indexPathForButton row]);
     // Get the tracked Object associated with it and update it's location.
     TrackedObject *objectForRow = [self.fetchResults objectAtIndexPath:indexPathForButton];
     CLLocation *gottenLocation = self.manager.currentLocation;
-    NSLog(@"%f %@", gottenLocation.coordinate.latitude, objectForRow.name);
+//    NSLog(@"%f %@", gottenLocation.coordinate.latitude, objectForRow.name);
     objectForRow.lat = [NSNumber numberWithFloat:gottenLocation.coordinate.latitude];
     objectForRow.lon = [NSNumber numberWithFloat:gottenLocation.coordinate.longitude];
     [self save];

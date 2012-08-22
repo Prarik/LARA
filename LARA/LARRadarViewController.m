@@ -351,37 +351,7 @@
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     LARLocationManager *manager = myAppDel.locationManager;
     self.mostRecentLocation = manager.currentLocation;
-    NSLog(@"For mostRecent Lat = %f, Lon = %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
-    
-    ////////////////////////////////////////// INSERT FAKE TRACKED OBJECTS HERE //////////////////////////////////////////
-    
-//    TrackedObject *one = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
-//    one.name = @"Pontiac Sunfire";
-//    one.subtitle = @"PSUN";
-//    one.iconImageColor = @"red";
-//    one.iconImageType = @"triangle";
-//    one.lat = [[NSNumber alloc] initWithDouble:41.15778];
-//    one.lon = [[NSNumber alloc] initWithDouble:-85.13868];
-//    
-//    TrackedObject *two = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
-//    two.name = @"Television";
-//    two.subtitle = @"HMTV";
-//    two.iconImageColor = @"yellow";
-//    two.iconImageType = @"square";
-//    two.lat = [[NSNumber alloc] initWithDouble:41.15578];
-//    two.lon = [[NSNumber alloc] initWithDouble:-85.13768];
-//    
-//    TrackedObject *three = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
-//    three.name = @"Tree";
-//    three.subtitle = @"TREE";
-//    three.iconImageColor = @"cyan";
-//    three.iconImageType = @"circle";
-//    three.lat = [[NSNumber alloc] initWithDouble:41.15498];
-//    three.lon = [[NSNumber alloc] initWithDouble:-85.13789];
-//    
-//    NSArray *chosenObjects = [[NSArray alloc] initWithObjects:one, two, three, nil];
-    
-    ////////////////////////////////////////// INSERT FAKE TRACKED OBJECTS HERE //////////////////////////////////////////
+//    NSLog(@"For mostRecent Lat = %f, Lon = %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
     
     NSMutableArray *firstDisplayHolder = [[NSMutableArray alloc] init];
     NSMutableArray *secondDisplayHolder = [[NSMutableArray alloc] init];
@@ -393,15 +363,15 @@
     for (TrackedObject *each in chosenObjects)
     {
         CLLocation *trackedObjectsLocation = [[CLLocation alloc] initWithLatitude:[each.lat doubleValue] longitude:[each.lon doubleValue]];
-        NSLog(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
+       // NSLog(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
         CLLocationDistance distanceFromCurrentLocation = [trackedObjectsLocation distanceFromLocation:self.mostRecentLocation];
-        NSLog(@"distance from %@: %f", each.name , distanceFromCurrentLocation);
+       // NSLog(@"distance from %@: %f", each.name , distanceFromCurrentLocation);
         if ((distanceFromCurrentLocation < kLocationDistanceThreshold) & ([each.shouldDisplay boolValue]))
         {
             /////////////////////////////////////////////////////////////////////////// Set up a LARDisplayObject.
             
             LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] initWithShape:each.iconImageType andColor:each.iconImageColor];
-            NSLog(@"%@ , %@", each.iconImageType, each.iconImageColor);
+           // NSLog(@"%@ , %@", each.iconImageType, each.iconImageColor);
             thisDisplayObject.view.frame = CGRectMake(0, 0, 20, 29);
             thisDisplayObject.view.bounds = CGRectMake(0, 0, 20, 29);
             thisDisplayObject.iconType = each.iconImageType;
@@ -461,7 +431,7 @@
                 else if (( [changeInLat doubleValue] > 0 ) & ( [changeInLon doubleValue] < 0) )
                 {
                     thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:450-acos([changeInLon doubleValue])*(180/M_PI)];
-                    NSLog(@"Object's Angle From North = %f", [thisDisplayObject.angleFromNorth doubleValue]);
+                //    NSLog(@"Object's Angle From North = %f", [thisDisplayObject.angleFromNorth doubleValue]);
                 }
             }
             
@@ -521,18 +491,18 @@
     for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
     {
         // Adjust angle from true north by currentHeading to correctly place the view
-        NSLog(@"Magnetic Heading = %d, Angle of Object From North = %d", [magneticHeading intValue], [each.angleFromNorth intValue]); //, (360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360);
+//        NSLog(@"Magnetic Heading = %d, Angle of Object From North = %d", [magneticHeading intValue], [each.angleFromNorth intValue]); //, (360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360);
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        NSLog(@"Adjusted Heading = %f", [adjustedHeading doubleValue]);
+//        NSLog(@"Adjusted Heading = %f", [adjustedHeading doubleValue]);
         each.view.center = CGPointMake(kCenterOfRadarX+kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         
         
-        NSLog(@"Sin: %f,Cos: %f", sin(M_PI/180*[adjustedHeading doubleValue]), cos(M_PI/180*[adjustedHeading doubleValue]));
-        NSLog(@"Sin wMag: %f,Cos wMag: %f", kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
-        NSLog(@"Object view X Coord = %f, Object View Y Coord = %f", each.view.center.x, each.view.center.y);
-        NSLog(@"--");
-        NSLog(@"--");
-        NSLog(@"--");
+//        NSLog(@"Sin: %f,Cos: %f", sin(M_PI/180*[adjustedHeading doubleValue]), cos(M_PI/180*[adjustedHeading doubleValue]));
+//        NSLog(@"Sin wMag: %f,Cos wMag: %f", kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+//        NSLog(@"Object view X Coord = %f, Object View Y Coord = %f", each.view.center.x, each.view.center.y);
+//        NSLog(@"--");
+//        NSLog(@"--");
+//        NSLog(@"--");
         [self.view addSubview:each.view];
     }
      

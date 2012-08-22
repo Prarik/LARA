@@ -25,8 +25,6 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateToLocation:(CLLocation *)newLocation fromLocation:(CLLocation *)oldLocation
 {
-    static int count = 0;
-    count += 1;
     self.currentLocation = newLocation;
     self.currentVerticalAccuracy = newLocation.verticalAccuracy;
     self.currentHorizontalAccuracy = newLocation.horizontalAccuracy;
