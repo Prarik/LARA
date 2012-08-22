@@ -39,6 +39,7 @@
 @property (nonatomic) BOOL isAnimatingRadar;
 @property (nonatomic, strong) LARRadarScan *radarScan;
 @property (nonatomic, strong) NSTimer *timerForRadar;
+@property (nonatomic, strong) NSTimer *timerBeforeAnimation;
 @property (nonatomic, strong) NSFetchedResultsController *resultsController;
 @property (nonatomic, strong) NSMutableArray *fetchedObjectsForDisplay;
 @property (nonatomic, strong) NSArray *displayObjects;
@@ -60,6 +61,7 @@
 - (void)addDisplayViewsToScreen;
 
 - (void)initialLaunch;
+- (void)authorizeCoreLocation;
 
 - (BOOL)stopAnimatingRadar;
 - (void)removeAllRadarPoints;
@@ -72,9 +74,11 @@
 
 @synthesize radarScreen;
 @synthesize isAnimatingRadar;
+@synthesize isPreparedToSwitchViews;
 @synthesize radarScan;
 @synthesize radarButton;
 @synthesize timerForRadar;
+@synthesize timerBeforeAnimation;
 @synthesize context;
 @synthesize locationAccuracyLabel;
 @synthesize headingAccuracyLabel;
@@ -107,9 +111,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.isPreparedToSwitchViews = NO;
     self.isTheActiveScreen = YES;
     self.isAnimatingRadar = NO;
     [self waitForAccuracy];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    
 }
 
 - (void)viewDidUnload
@@ -147,26 +157,47 @@
 
 #pragma mark - Launch Methods
 
+
+- (void)authorizeCoreLocation
+{
+    CLAuthorizationStatus authorizationStat = [CLLocationManager authorizationStatus];
+    if (authorizationStat == kCLAuthorizationStatusAuthorized) 
+    {
+        [self waitForAccuracy];
+    }
+    else if (authorizationStat == kCLAuthorizationStatusDenied)
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"This application requires location services to function.  This authorization be adjusted in the settings application on this device." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    else if (authorizationStat == kCLAuthorizationStatusRestricted) 
+    {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"This application requires location services to function." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    else if (authorizationStat == kCLAuthorizationStatusNotDetermined) 
+    {
+        // do nada
+    }
+}
+
 - (void)waitForAccuracy
 {
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     LARLocationManager *manager = myAppDel.locationManager;
-//    CLAuthorizationStatus authorizationStat = manager.manager.authorizationStatus;
-//    if (YES) 
-//    {
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initialLaunch) name:@"locationInitialized" object:nil];
         [manager.manager startUpdatingLocation];
         [manager.manager startUpdatingHeading];
         [self.activityIndicator startAnimating];
-//    }
 }
 
 - (void)initialLaunch
 {
     [self.activityIndicator stopAnimating];
+    self.isPreparedToSwitchViews = YES;
     self.aquiringDesiredAccuracyLabel.hidden = YES;
     [self fetchRadarObjects];
-    [NSTimer scheduledTimerWithTimeInterval:1
+    self.timerBeforeAnimation = [NSTimer scheduledTimerWithTimeInterval:1
                                      target:self
                                    selector:@selector(radarButtonClicked)
                                    userInfo:nil
@@ -187,7 +218,8 @@
             self.radarScan = nil;
             [self.timerForRadar invalidate];
             self.timerForRadar = nil;
-            [NSTimer scheduledTimerWithTimeInterval:1
+            self.timerBeforeAnimation = nil;
+            self.timerBeforeAnimation = [NSTimer scheduledTimerWithTimeInterval:1
                                              target:self
                                            selector:@selector(radarButtonClicked)
                                            userInfo:nil
@@ -321,7 +353,9 @@
 {
     self.isTheActiveScreen = YES;
     [self fetchRadarObjects];
-    [NSTimer scheduledTimerWithTimeInterval:2
+    [self.timerBeforeAnimation invalidate];
+    self.timerBeforeAnimation = nil;
+    self.timerBeforeAnimation = [NSTimer scheduledTimerWithTimeInterval:2
                                               target:self
                                             selector:@selector(radarButtonClicked)
                                             userInfo:nil
@@ -361,11 +395,11 @@
     NSMutableArray *lastDisplayHolder = [[NSMutableArray alloc] init];
     NSNumber *currentLocationLat = [NSNumber numberWithDouble:self.mostRecentLocation.coordinate.latitude];
     NSNumber *currentLocationLon = [NSNumber numberWithDouble:self.mostRecentLocation.coordinate.longitude];
-    NSLog(@"%f", [currentLocationLat doubleValue]);
+    //NSLog(@"%f", [currentLocationLat doubleValue]);
     
     for (TrackedObject *each in chosenObjects)
     {
-        NSLog(@"%f", [each.lat doubleValue]);
+        //NSLog(@"%f", [each.lat doubleValue]);
         CLLocation *trackedObjectsLocation = [[CLLocation alloc] initWithLatitude:[each.lat doubleValue] longitude:[each.lon doubleValue]];
        // NSLog(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
         CLLocationDistance distanceFromCurrentLocation = [trackedObjectsLocation distanceFromLocation:self.mostRecentLocation];
@@ -376,8 +410,8 @@
             
             LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] initWithShape:each.iconImageType andColor:each.iconImageColor];
            // NSLog(@"%@ , %@", each.iconImageType, each.iconImageColor);
-            thisDisplayObject.view.frame = CGRectMake(0, 0, 20, 29);
-            thisDisplayObject.view.bounds = CGRectMake(0, 0, 20, 29);
+            thisDisplayObject.view.frame = CGRectMake(0, 0, 22, 29);
+            thisDisplayObject.view.bounds = CGRectMake(0, 0, 22, 29);
             thisDisplayObject.ticker.text = each.subtitle;
             thisDisplayObject.view.alpha = 0;
             
@@ -525,6 +559,8 @@
 - (BOOL)tabBarWillMakeInactive
 {
     self.isTheActiveScreen = NO;
+    [self.timerBeforeAnimation invalidate];
+    self.timerBeforeAnimation = nil;
     return [self stopAnimatingRadar];
 }
 

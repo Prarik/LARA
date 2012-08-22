@@ -193,18 +193,24 @@
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    if (viewController == self.radarController) 
+    if (self.radarController.isPreparedToSwitchViews) 
     {
-        // do nada
+        if (viewController == self.radarController) 
+        {
+            // do nada
+        }
+        else
+        {
+            [self.radarController tabBarWillMakeInactive];
+        }
+        return YES;
     }
-    else
+    else 
     {
-        [self.radarController tabBarWillMakeInactive];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please wait until the desired location accuracy is initialized." delegate:self cancelButtonTitle:@"OK." otherButtonTitles:nil];
+        [alert show];
+        return NO;
     }
-    
-//    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Can't do that" delegate:self cancelButtonTitle:@"OK." otherButtonTitles:nil];
-//    [alert show];
-    return YES;
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController

@@ -54,7 +54,7 @@
 {
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:kTrackedObject inManagedObjectContext:self.context];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"viewPosition" ascending:YES];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
     [fetch setFetchBatchSize:20];
     [fetch setEntity:entity];
     [fetch setSortDescriptors:[NSArray arrayWithObject:sort]];

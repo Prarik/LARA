@@ -18,6 +18,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *headingAccuracyLabel;
 @property (strong, nonatomic) IBOutlet UILabel *aquiringDesiredAccuracyLabel;
 @property (nonatomic) BOOL isTheActiveScreen;
+@property (nonatomic) BOOL isPreparedToSwitchViews;
 
 - (IBAction)radarButtonClicked;
 - (BOOL)tabBarWillMakeInactive;
