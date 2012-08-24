@@ -54,7 +54,7 @@
 {
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:kTrackedObject inManagedObjectContext:self.context];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"viewPosition" ascending:YES];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
     [fetch setFetchBatchSize:20];
     [fetch setEntity:entity];
     [fetch setSortDescriptors:[NSArray arrayWithObject:sort]];
@@ -155,7 +155,14 @@
     UIView *displayAndRemove = [cell viewWithTag:2];
     UIButton *displayRemoveButton = (UIButton *)displayAndRemove;
     [displayRemoveButton addTarget:self action:@selector(cellDisplayRemoveButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-    [displayRemoveButton setTitle:@"Display" forState:UIControlStateNormal];
+    if ([currentTrackedObject.shouldDisplay boolValue]) 
+    {
+        [displayRemoveButton setTitle:@"Hide" forState:UIControlStateNormal];
+    }
+    else 
+    {
+        [displayRemoveButton setTitle:@"Display" forState:UIControlStateNormal];
+    }
     
     // Remove the old icon
     [[cell viewWithTag:4] removeFromSuperview];
@@ -298,11 +305,12 @@
 
 - (void)addUsersItem
 {
+    CLLocation *gottenLocation = self.manager.currentLocation;
     TrackedObject *trackedObject = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
     trackedObject.name = addItemController.thisName;
     trackedObject.subtitle = addItemController.thisTicker;
-    trackedObject.lat = [NSNumber numberWithDouble:40.0];
-    trackedObject.lon = [NSNumber numberWithDouble:-80.2];
+    trackedObject.lat = [NSNumber numberWithDouble:gottenLocation.coordinate.latitude];
+    trackedObject.lon = [NSNumber numberWithDouble:gottenLocation.coordinate.longitude];
     trackedObject.iconImageColor = addItemController.thisColor;
     trackedObject.iconImageType = addItemController.thisShape;
     trackedObject.shouldDisplay = [NSNumber numberWithBool:YES];
@@ -318,37 +326,41 @@
 {
     // Find the row of the button tapped.
     UIButton *senderButton = (UIButton *)sender;
-    NSLog(@"%@", [senderButton titleForState:UIControlStateNormal]);
     
-    LARRadarPointCell *buttonCell = (LARRadarPointCell *)[[senderButton superview] superview];
-    NSLog(@"%@", buttonCell.reuseIdentifier);
-    
+    UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
-    NSLog(@"%u", indexPathForButton.row);
-    
+//    NSLog(@"%u", [indexPathForButton row]);
     // Get the tracked Object associated with it and update it's location.
     TrackedObject *objectForRow = [self.fetchResults objectAtIndexPath:indexPathForButton];
     NSLog(@"%@", objectForRow.name);
     CLLocation *gottenLocation = self.manager.currentLocation;
-    NSLog(@"off CLLocation %f", self.manager.currentLocation.coordinate.latitude);
-    NSNumber *numberForLat = [[NSNumber alloc] initWithDouble:gottenLocation.coordinate.latitude];
-    NSLog(@"off the NSNumber %f", [numberForLat doubleValue]);
-    [objectForRow setLat:numberForLat];
-    [self save];
-    NSLog(@"off Object %f", [objectForRow.lat floatValue]);
-    objectForRow.lon = [NSNumber numberWithDouble:gottenLocation.coordinate.longitude];
+
+//    NSLog(@"%f %@", gottenLocation.coordinate.latitude, objectForRow.name);
+    objectForRow.lat = [NSNumber numberWithFloat:gottenLocation.coordinate.latitude];
+    objectForRow.lon = [NSNumber numberWithFloat:gottenLocation.coordinate.longitude];
     [self save];
     
     // Display the accuracy to the user.
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Updated" message:[NSString stringWithFormat:@"With Horizonal Accuracy: %d \n And Vertical Accuracy: %d", (int)self.manager.currentHorizontalAccuracy, (int)self.manager.currentVerticalAccuracy] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Updated" message:[NSString stringWithFormat:@"With an accuracy of %d meters", (int)self.manager.currentHorizontalAccuracy, (int)self.manager.currentVerticalAccuracy] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
 }
 
 - (IBAction)cellDisplayRemoveButtonTapped:(id)sender
 {
     UIButton *senderButton = (UIButton *)sender;
-    UITableViewCell *buttonCell = (UITableViewCell *)[senderButton superview];
-    NSUInteger buttonRow = [[self.tableView indexPathForCell:buttonCell] row];
+    UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
+    NSIndexPath *buttonRow = [self.tableView indexPathForCell:buttonCell];
+    TrackedObject *thisRowsObject = [self.fetchResults objectAtIndexPath:buttonRow];
+    if ([thisRowsObject.shouldDisplay boolValue]) 
+    {
+        thisRowsObject.shouldDisplay = [NSNumber numberWithBool:NO];
+    }
+    else 
+    {
+        thisRowsObject.shouldDisplay = [NSNumber numberWithBool:YES];
+    }
+    [self save];
+    [self.tableView reloadData];
 }
 
 @end

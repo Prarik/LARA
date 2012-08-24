@@ -29,6 +29,8 @@
 - (IBAction)nameDidEndEdit:(id)sender;
 - (IBAction)tickerDidEndEdit:(id)sender;
 - (IBAction)addItemButtonPressed;
+- (IBAction)backgroundTap:(id)sender;
+
 
 @end
 

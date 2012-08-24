@@ -7,11 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LARShapeIcon.h"
 
-@interface LARTriangleIcon : UIView
-
-@property (nonatomic, strong) UIColor *drawColor;
-
-- (id)initWithFrame:(CGRect)frame andColor:(NSString *)selectedColor;
+@interface LARTriangleIcon : LARShapeIcon
 
 @end

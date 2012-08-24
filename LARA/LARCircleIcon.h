@@ -7,11 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "LARShapeIcon.h"
 
-@interface LARCircleIcon : UIView
+@interface LARCircleIcon : LARShapeIcon
 
-@property (nonatomic, strong) UIColor *drawColor;
-
-- (id)initWithFrame:(CGRect)frame andColor:(NSString *)selectedColor;
 
 @end

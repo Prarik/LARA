@@ -27,24 +27,25 @@
         // Initialization code
         if ([shapeName isEqualToString:@"circle"]) 
         {
-            self.icon = [[LARCircleIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
+            self.icon = [[LARCircleIcon alloc] initWithFrame:CGRectMake(3, 0, 16, 16) andColor:colorName];
             [self.view addSubview:self.icon];
         }
         else if ([shapeName isEqualToString:@"square"])
         {
-            self.icon = [[LARSquareIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
+            self.icon = [[LARSquareIcon alloc] initWithFrame:CGRectMake(3, 0, 16, 16) andColor:colorName];
             [self.view addSubview:self.icon];
         }
         else if ([shapeName isEqualToString:@"triangle"])
         {
-            self.icon = [[LARTriangleIcon alloc] initWithFrame:CGRectMake(2, 0, 16, 16) andColor:colorName];
+            self.icon = [[LARTriangleIcon alloc] initWithFrame:CGRectMake(3, 0, 16, 16) andColor:colorName];
             [self.view addSubview:self.icon];
         }
-        self.ticker = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, 20, 12)];
+        self.ticker = [[UILabel alloc] initWithFrame:CGRectMake(0, 17, 23, 12)];
+        self.ticker.adjustsFontSizeToFitWidth = YES;
         [self.view addSubview:self.ticker];
         self.ticker.textColor = [UIColor whiteColor];
         self.ticker.backgroundColor = [UIColor clearColor];
-        self.ticker.font = [UIFont systemFontOfSize:7];
+        self.ticker.font = [UIFont systemFontOfSize:8];
         self.ticker.textAlignment = UITextAlignmentCenter;
         self.angleFromNorth = [NSNumber numberWithDouble:0];
         [self.view setNeedsDisplay];

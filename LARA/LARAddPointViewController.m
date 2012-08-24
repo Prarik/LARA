@@ -119,22 +119,12 @@
 
 - (IBAction)nameDidEndEdit:(id)sender 
 {
-    self.thisTicker = self.tickerTextField.text;
-    UILabel *thisLabel = (UILabel *)sender;
-    self.thisName = thisLabel.text;
-    [self removeOldDisplayObject];
-    [self updateDisplayObject];
-    [sender resignFirstResponder];
+    [self backgroundTap:sender];
 }
 
 - (IBAction)tickerDidEndEdit:(id)sender 
 {
-    self.thisName = self.nameTextField.text;
-    UILabel *thisLabel = (UILabel *)sender;
-    self.thisTicker = thisLabel.text;
-    [self removeOldDisplayObject];
-    [self updateDisplayObject];
-    [sender resignFirstResponder];
+    [self backgroundTap:sender];
 }
 
 - (IBAction)addItemButtonPressed 
@@ -172,6 +162,16 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     return YES;
+}
+
+- (IBAction)backgroundTap:(id)sender
+{
+    self.thisName = self.nameTextField.text;
+    self.thisTicker = self.tickerTextField.text;
+    [self removeOldDisplayObject];
+    [self updateDisplayObject];
+    [self.nameTextField resignFirstResponder];
+    [self.tickerTextField resignFirstResponder];
 }
 
 @end
