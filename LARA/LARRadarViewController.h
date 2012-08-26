@@ -17,6 +17,7 @@
 @property (strong, nonatomic) IBOutlet UILabel *locationAccuracyLabel;
 @property (strong, nonatomic) IBOutlet UILabel *headingAccuracyLabel;
 @property (strong, nonatomic) IBOutlet UILabel *aquiringDesiredAccuracyLabel;
+@property (nonatomic, strong) UITabBarItem *tabBarItem;
 @property (nonatomic) BOOL isTheActiveScreen;
 @property (nonatomic) BOOL isPreparedToSwitchViews;
 

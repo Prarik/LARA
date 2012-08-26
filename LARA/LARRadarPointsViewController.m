@@ -18,7 +18,24 @@
 
 #define kTitle @"Points"
 
+#define kCircle @"circle"
+#define kSquare @"square"
+#define kTriangle @"triangle"
+
+#define kHide @"Hide"
+#define kDisplay @"Display"
+
+#define kSortKey @"name"
+
+#define kRowHeight 92
+
+#define kIconRect CGRectMake(0, 0, 16, 16)
+
 #define kTrackedObject @"TrackedObject"
+
+#define kLARPointsCell @"LARRadarPointCell"
+#define kCellIdentifier @"RadarPointCell"
+#define kLARAddPointViewController @"LARAddPointViewController"
 
 @interface LARRadarPointsViewController ()
 
@@ -34,7 +51,7 @@
 @synthesize fetchResults = _fetchResults;
 @synthesize addItemController;
 @synthesize manager = _manager;
-@synthesize currentTable;
+@synthesize tabBarItem;
 
 #pragma mark - User Interaction Methods
 
@@ -42,7 +59,7 @@
 {
     if (self.addItemController == nil) 
     {
-        self.addItemController = [[LARAddPointViewController alloc] initWithNibName:@"LARAddPointViewController" bundle:nil];
+        self.addItemController = [[LARAddPointViewController alloc] initWithNibName:kLARAddPointViewController bundle:nil];
         self.addItemController.delegate = self;
     }
     [self.navigationController pushViewController:self.addItemController animated:YES];
@@ -54,11 +71,15 @@
 {
     NSFetchRequest *fetch = [[NSFetchRequest alloc] init];
     NSEntityDescription *entity = [NSEntityDescription entityForName:kTrackedObject inManagedObjectContext:self.context];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:kSortKey ascending:YES];
     [fetch setFetchBatchSize:20];
     [fetch setEntity:entity];
     [fetch setSortDescriptors:[NSArray arrayWithObject:sort]];
-    NSFetchedResultsController *resultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetch managedObjectContext:self.context sectionNameKeyPath:nil cacheName:nil];
+    NSFetchedResultsController *resultsController = [[NSFetchedResultsController alloc]
+                                                     initWithFetchRequest:fetch
+                                                     managedObjectContext:self.context
+                                                     sectionNameKeyPath:nil
+                                                     cacheName:nil];
     
     self.fetchResults = resultsController;
     self.fetchResults.delegate = self;
@@ -76,6 +97,7 @@
     {
         // Custom initialization
         self.title = kTitle;
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:kTitle image:[UIImage imageNamed:@"PointsTabBarIcon.png"] tag:2];
     }
     return self;
 }
@@ -87,9 +109,15 @@
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     [self getData];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addButtonPressed)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc]
+                                              initWithBarButtonSystemItem:UIBarButtonSystemItemAdd
+                                              target:self
+                                              action:@selector(addButtonPressed)];
     
-    [self.tableView setRowHeight:92];
+    [self.tableView setRowHeight:kRowHeight];
+    
+    [self.tableView setBackgroundColor:[UIColor blackColor]];
+    [self.tableView setSeparatorColor:[UIColor clearColor]];
     
 }
 
@@ -121,25 +149,22 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"RadarPointsCell";
+    static NSString *cellIdentifier = kCellIdentifier;
     static BOOL nibsRegistered = NO;
     
     if (!nibsRegistered)
     {
-        UINib *nib = [UINib nibWithNibName:@"LARRadarPointCell" bundle:nil];
+        UINib *nib = [UINib nibWithNibName:kLARPointsCell bundle:nil];
         [tableView registerNib:nib forCellReuseIdentifier:cellIdentifier];
         nibsRegistered = YES;
     }
     
     LARRadarPointCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    
-    
     if (cell == nil) 
     {
         cell = [[LARRadarPointCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.showsReorderControl = NO;
-        self.currentTable = tableView;
+        cell.showsReorderControl = YES;
     }
     
     // Configure the cell...
@@ -147,53 +172,56 @@
     cell.nameLabel.text = currentTrackedObject.name;
     cell.subLabel.text = currentTrackedObject.subtitle;
     
-    // Add the appropriate selectors to the buttons
-    UIView *update = [cell viewWithTag:1];
-    UIButton *updateButton = (UIButton *)update;
-    [updateButton addTarget:self action:@selector(cellUpdateButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    // Set up the custom backgrounds for the buttons
+    UIImage *buttonImage = [UIImage imageNamed:@"GrayButton.png"];
+    UIImage *stretchableImage = [buttonImage stretchableImageWithLeftCapWidth:12 topCapHeight:0];
+    [cell.updateButton setBackgroundImage:stretchableImage forState:UIControlStateNormal];
+    [cell.removeButton setBackgroundImage:stretchableImage forState:UIControlStateNormal];
     
-    UIView *displayAndRemove = [cell viewWithTag:2];
-    UIButton *displayRemoveButton = (UIButton *)displayAndRemove;
-    [displayRemoveButton addTarget:self action:@selector(cellDisplayRemoveButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    // Add the appropriate selectors to the buttons
+    [cell.updateButton addTarget:self action:@selector(cellUpdateButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    [cell.removeButton addTarget:self action:@selector(cellDisplayRemoveButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+    
     if ([currentTrackedObject.shouldDisplay boolValue]) 
     {
-        [displayRemoveButton setTitle:@"Hide" forState:UIControlStateNormal];
+        [cell.removeButton setTitle:kHide forState:UIControlStateNormal];
     }
     else 
     {
-        [displayRemoveButton setTitle:@"Display" forState:UIControlStateNormal];
+        [cell.removeButton setTitle:kDisplay forState:UIControlStateNormal];
     }
     
     // Remove the old icon
     [[cell viewWithTag:4] removeFromSuperview];
     
     // Create a new icon
-    UIView *viewToAdd = [self iconForCellOfTrackedObject:currentTrackedObject];
-    [viewToAdd setTag:4];
+    UIView *icon = [self iconForCellOfTrackedObject:currentTrackedObject];
+    [icon setTag:4];
     
     // Add icon to cell
-    UIView *customIconSuperView = [cell viewWithTag:3];
-    [customIconSuperView addSubview:viewToAdd];
+    [cell.iconView addSubview:icon];
     
     return cell;
 }
 
 - (UIView *)iconForCellOfTrackedObject:(TrackedObject *)currentObject
 {
-    UIView *viewToAdd;
-    if ([currentObject.iconImageType isEqualToString:@"circle"]) 
+    UIView *icon;
+    
+    if ([currentObject.iconImageType isEqualToString:kCircle])
     {
-        viewToAdd = [[LARCircleIcon alloc] initWithFrame:CGRectMake(0, 0, 16, 16) andColor:currentObject.iconImageColor];
+        icon = [[LARCircleIcon alloc] initWithFrame:kIconRect andColor:currentObject.iconImageColor];
     }
-    else if ([currentObject.iconImageType isEqualToString:@"square"])
+    else if ([currentObject.iconImageType isEqualToString:kSquare])
     {
-        viewToAdd = [[LARSquareIcon alloc] initWithFrame:CGRectMake(0, 0, 16, 16) andColor:currentObject.iconImageColor];
+        icon = [[LARSquareIcon alloc] initWithFrame:kIconRect andColor:currentObject.iconImageColor];
     }
-    else if ([currentObject.iconImageType isEqualToString:@"triangle"])
+    else if ([currentObject.iconImageType isEqualToString:kTriangle])
     {
-        viewToAdd = [[LARTriangleIcon alloc] initWithFrame:CGRectMake(0, 0, 16, 16) andColor:currentObject.iconImageColor];
+        icon = [[LARTriangleIcon alloc] initWithFrame:kIconRect andColor:currentObject.iconImageColor];
     }
-    return viewToAdd;
+    
+    return icon;
 }
 
 // Override to support editing the table view.
@@ -215,27 +243,27 @@
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return NO;
+    return YES;
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath;
 {
-    NSMutableArray *things = [[self.fetchResults fetchedObjects] mutableCopy];
+    NSMutableArray *trackedObjects = [[self.fetchResults fetchedObjects] mutableCopy];
     
     // Grab the item we're moving.
-    TrackedObject *thing = [self.fetchResults objectAtIndexPath:sourceIndexPath];
+    TrackedObject *trackedObject = [self.fetchResults objectAtIndexPath:sourceIndexPath];
     
     // Remove the object we're moving from the array.
-    [things removeObject:thing];
+    [trackedObjects removeObject:trackedObject];
     // Now re-insert it at the destination.
-    [things insertObject:thing atIndex:[destinationIndexPath row]];
+    [trackedObjects insertObject:trackedObject atIndex:[destinationIndexPath row]];
     
     // All of the objects are now in their correct order. Update each
     // object's displayOrder field by iterating through the array.
     int i = 0;
-    for (TrackedObject *mo in things)
+    for (TrackedObject *each in trackedObjects)
     {
-        mo.viewPosition =  [NSNumber numberWithInt:i++];
+        each.viewPosition =  [NSNumber numberWithInt:i++];
     }
     
     [self save];
@@ -329,19 +357,22 @@
     
     UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
-//    NSLog(@"%u", [indexPathForButton row]);
     // Get the tracked Object associated with it and update it's location.
-    TrackedObject *objectForRow = [self.fetchResults objectAtIndexPath:indexPathForButton];
-    NSLog(@"%@", objectForRow.name);
+    TrackedObject *trackedObject = [self.fetchResults objectAtIndexPath:indexPathForButton];
+    NSLog(@"%@", trackedObject.name);
     CLLocation *gottenLocation = self.manager.currentLocation;
 
-//    NSLog(@"%f %@", gottenLocation.coordinate.latitude, objectForRow.name);
-    objectForRow.lat = [NSNumber numberWithFloat:gottenLocation.coordinate.latitude];
-    objectForRow.lon = [NSNumber numberWithFloat:gottenLocation.coordinate.longitude];
+    trackedObject.lat = [NSNumber numberWithFloat:gottenLocation.coordinate.latitude];
+    trackedObject.lon = [NSNumber numberWithFloat:gottenLocation.coordinate.longitude];
     [self save];
     
     // Display the accuracy to the user.
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Updated" message:[NSString stringWithFormat:@"With an accuracy of %d meters", (int)self.manager.currentHorizontalAccuracy, (int)self.manager.currentVerticalAccuracy] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Updated"
+                                                    message:[NSString stringWithFormat:@"With an accuracy of %d meters",
+                                                             (int)self.manager.currentHorizontalAccuracy]
+                                                   delegate:nil
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles:nil];
     [alert show];
 }
 
@@ -350,14 +381,14 @@
     UIButton *senderButton = (UIButton *)sender;
     UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
     NSIndexPath *buttonRow = [self.tableView indexPathForCell:buttonCell];
-    TrackedObject *thisRowsObject = [self.fetchResults objectAtIndexPath:buttonRow];
-    if ([thisRowsObject.shouldDisplay boolValue]) 
+    TrackedObject *trackedObject = [self.fetchResults objectAtIndexPath:buttonRow];
+    if ([trackedObject.shouldDisplay boolValue]) 
     {
-        thisRowsObject.shouldDisplay = [NSNumber numberWithBool:NO];
+        trackedObject.shouldDisplay = [NSNumber numberWithBool:NO];
     }
     else 
     {
-        thisRowsObject.shouldDisplay = [NSNumber numberWithBool:YES];
+        trackedObject.shouldDisplay = [NSNumber numberWithBool:YES];
     }
     [self save];
     [self.tableView reloadData];

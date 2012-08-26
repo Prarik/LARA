@@ -51,7 +51,6 @@
 @property (nonatomic, strong) NSArray *thirdRingDisplayObjects;
 @property (nonatomic, strong) NSArray *lastRingDisplayObjects;
 
-- (void)loadBackgroundImage;
 - (void)loadRadarScan;
 - (void)animateRadar;
 - (void)animateObjectAlpha;
@@ -94,6 +93,7 @@
 @synthesize lastRingDisplayObjects;
 @synthesize activityIndicator;
 @synthesize isTheActiveScreen;
+@synthesize tabBarItem;
 
 #pragma mark - Life Cycle
 
@@ -103,7 +103,8 @@
     if (self)
     {
         // Custom initialization
-        self.title = kTitle;
+        self.tabBarItem = [[UITabBarItem alloc] initWithTitle:kTitle image:[UIImage imageNamed:@"RadarTabIcon.png"] tag:1];
+        
     }
     return self;
 }
@@ -138,13 +139,6 @@
     return (interfaceOrientation == UIInterfaceOrientationPortrait);
 }
 
-- (void)loadBackgroundImage
-{
-    UIImage *radarBackground = [UIImage imageNamed:@"Radarprac2"];
-    self.radarScreen.image = radarBackground;
-    self.radarScreen.alpha = 0.6;
-}
-
 - (void)loadRadarScan
 {
     if (self.radarScan)
@@ -167,12 +161,20 @@
     }
     else if (authorizationStat == kCLAuthorizationStatusDenied)
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"This application requires location services to function.  This authorization be adjusted in the settings application on this device." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services"
+                                                        message:@"This application requires location services to function.  This authorization can be adjusted in the settings application on this device."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
         [alert show];
     }
     else if (authorizationStat == kCLAuthorizationStatusRestricted) 
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services" message:@"This application requires location services to function." delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Location Services"
+                                                        message:@"This application requires location services to function."
+                                                       delegate:nil
+                                              cancelButtonTitle:@"Ok"
+                                              otherButtonTitles:nil];
         [alert show];
     }
     else if (authorizationStat == kCLAuthorizationStatusNotDetermined) 
@@ -185,10 +187,10 @@
 {
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     LARLocationManager *manager = myAppDel.locationManager;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initialLaunch) name:@"locationInitialized" object:nil];
-        [manager.manager startUpdatingLocation];
-        [manager.manager startUpdatingHeading];
-        [self.activityIndicator startAnimating];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initialLaunch) name:@"locationInitialized" object:nil];
+    [manager.manager startUpdatingLocation];
+    [manager.manager startUpdatingHeading];
+    [self.activityIndicator startAnimating];
 }
 
 - (void)initialLaunch
@@ -287,10 +289,6 @@
     }
     if (([magnitude doubleValue] > 70) & !([magnitude doubleValue] > 110)) 
     {
-//        for (LARDisplayObject *each in self.firstRingDisplayObjects) 
-//        {
-//            each.view.alpha -=0.06;
-//        }
         for (LARDisplayObject *each in self.secondRingDisplayObjects) 
         {
             each.view.alpha +=0.1;
@@ -298,14 +296,6 @@
     }
     if (([magnitude doubleValue] > 110) & !([magnitude doubleValue] > 150)) 
     {
-//        for (LARDisplayObject *each in self.firstRingDisplayObjects) 
-//        {
-//            each.view.alpha -=0.06;
-//        }
-//        for (LARDisplayObject *each in self.secondRingDisplayObjects) 
-//        {
-//            each.view.alpha -=0.08;
-//        }
         for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
         {
             each.view.alpha +=0.1;
@@ -313,14 +303,6 @@
     }
     if (([magnitude doubleValue] > 150) & !([magnitude doubleValue] > 180)) 
     {
-//        for (LARDisplayObject *each in self.secondRingDisplayObjects) 
-//        {
-//            each.view.alpha -=0.08;
-//        }
-//        for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
-//        {
-//            each.view.alpha -=0.09;
-//        }
         for (LARDisplayObject *each in self.lastRingDisplayObjects) 
         {
             each.view.alpha +=0.1;
@@ -417,15 +399,17 @@
             
             /////////////////////////////////////////////////////////////////////////// Find the angle from north.
             
-            NSNumber *changeInLat = [NSNumber numberWithDouble:trackedObjectsLocation.coordinate.latitude-[currentLocationLat doubleValue]];
-            NSNumber *changeInLon = [NSNumber numberWithDouble:trackedObjectsLocation.coordinate.longitude-[currentLocationLon doubleValue]];
+            NSNumber *changeInLat = [NSNumber numberWithDouble:trackedObjectsLocation.coordinate.latitude - [currentLocationLat doubleValue]];
+            NSNumber *changeInLon = [NSNumber numberWithDouble:trackedObjectsLocation.coordinate.longitude - [currentLocationLon doubleValue]];
             //NSLog(@"^Lat %f, ^Lon %f", [changeInLat doubleValue], [changeInLon doubleValue]);
             
-            NSNumber *magnitudeOfChange = [NSNumber numberWithDouble:sqrt( pow( [changeInLat doubleValue] , 2 ) + pow( [changeInLon doubleValue] , 2 ))];
+            NSNumber *magnitudeOfChange = [NSNumber numberWithDouble:sqrt( pow( [changeInLat doubleValue] , 2 ) +
+                                                                          pow( [changeInLon doubleValue] , 2 ))];
             //NSLog(@"%f", [magnitudeOfChange doubleValue]);
             
             ///// Protect against divison by 0
-            if ([magnitudeOfChange doubleValue] == 0) {
+            if ([magnitudeOfChange doubleValue] == 0)
+            {
                 magnitudeOfChange = [NSNumber numberWithDouble:0.00001];
             }
             

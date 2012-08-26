@@ -13,6 +13,8 @@
 @synthesize subLabel = _subLabel;
 @synthesize removeButton = _removeButton;
 @synthesize updateButton = _updateButton;
+@synthesize iconView = _iconView;
+@synthesize backgroundImage = _backgroundImage;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier
 {

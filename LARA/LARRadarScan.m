@@ -8,6 +8,10 @@
 
 #import "LARRadarScan.h"
 
+#define kRed 0
+#define kGreen 0.976470588
+#define kBlue 0
+
 @implementation LARRadarScan
 
 @synthesize scanAlpha;
@@ -44,7 +48,8 @@
         self.scanAlpha -= 0.004;
     }
     
-    UIColor *drawColor = [UIColor colorWithRed:0 green:1 blue:0 alpha:scanAlpha];
+    
+    UIColor *drawColor = [UIColor colorWithRed:kRed green:kGreen blue:kBlue alpha:scanAlpha];
     CGContextSetStrokeColorWithColor(context, drawColor.CGColor);
     
     CGContextSetLineWidth(context, 2.5);

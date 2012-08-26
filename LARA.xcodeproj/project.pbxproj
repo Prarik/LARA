@@ -9,6 +9,12 @@
 /* Begin PBXBuildFile section */
 		3744D99E159BA36500CC687F /* LARRadarPointCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3744D99D159BA36500CC687F /* LARRadarPointCell.m */; };
 		3744D9A0159BA37B00CC687F /* LARRadarPointCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */; };
+		375C369715E82025008194DA /* PointsTabBarIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 375C369615E82025008194DA /* PointsTabBarIcon@2x.png */; };
+		375C369E15E860C5008194DA /* BlackButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 375C369D15E860C5008194DA /* BlackButton@2x.png */; };
+		375C36A015E8A513008194DA /* GrayButton@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 375C369F15E8A513008194DA /* GrayButton@2x.png */; };
+		37B6FDD715E7EB360045F82E /* RadarScreenBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = 37B6FDD615E7EB360045F82E /* RadarScreenBackground.png */; };
+		37B6FDDA15E80AFB0045F82E /* PointCellBackground@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37B6FDD915E80AFB0045F82E /* PointCellBackground@2x.png */; };
+		37B6FDDC15E811990045F82E /* RadarTabIcon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 37B6FDDB15E811990045F82E /* RadarTabIcon@2x.png */; };
 		37FC6B30159905F9000EF93F /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B2F159905F9000EF93F /* UIKit.framework */; };
 		37FC6B32159905F9000EF93F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B31159905F9000EF93F /* Foundation.framework */; };
 		37FC6B34159905F9000EF93F /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37FC6B33159905F9000EF93F /* CoreGraphics.framework */; };
@@ -39,7 +45,13 @@
 		3744D99C159BA36500CC687F /* LARRadarPointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarPointCell.h; sourceTree = "<group>"; };
 		3744D99D159BA36500CC687F /* LARRadarPointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointCell.m; sourceTree = "<group>"; };
 		3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarPointCell.xib; sourceTree = "<group>"; };
+		375C369615E82025008194DA /* PointsTabBarIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PointsTabBarIcon@2x.png"; sourceTree = "<group>"; };
+		375C369D15E860C5008194DA /* BlackButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "BlackButton@2x.png"; sourceTree = "<group>"; };
+		375C369F15E8A513008194DA /* GrayButton@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "GrayButton@2x.png"; sourceTree = "<group>"; };
 		379C5CD715CF64FD00BF3CAB /* LARA-2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "LARA-2.xcdatamodel"; sourceTree = "<group>"; };
+		37B6FDD615E7EB360045F82E /* RadarScreenBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RadarScreenBackground.png; sourceTree = "<group>"; };
+		37B6FDD915E80AFB0045F82E /* PointCellBackground@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "PointCellBackground@2x.png"; sourceTree = "<group>"; };
+		37B6FDDB15E811990045F82E /* RadarTabIcon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "RadarTabIcon@2x.png"; sourceTree = "<group>"; };
 		37FC6B2B159905F9000EF93F /* LARA.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LARA.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		37FC6B2F159905F9000EF93F /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		37FC6B31159905F9000EF93F /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -214,6 +226,12 @@
 		6F8571F315994C060095DFCB /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				375C369F15E8A513008194DA /* GrayButton@2x.png */,
+				375C369D15E860C5008194DA /* BlackButton@2x.png */,
+				375C369615E82025008194DA /* PointsTabBarIcon@2x.png */,
+				37B6FDDB15E811990045F82E /* RadarTabIcon@2x.png */,
+				37B6FDD915E80AFB0045F82E /* PointCellBackground@2x.png */,
+				37B6FDD615E7EB360045F82E /* RadarScreenBackground.png */,
 				6F8571F71599500A0095DFCB /* Radarprac2.png */,
 			);
 			name = Images;
@@ -276,6 +294,12 @@
 				6F8571F81599500A0095DFCB /* Radarprac2.png in Resources */,
 				3744D9A0159BA37B00CC687F /* LARRadarPointCell.xib in Resources */,
 				6FF72EA315DC22F40019FC7F /* LARAddPointViewController.xib in Resources */,
+				37B6FDD715E7EB360045F82E /* RadarScreenBackground.png in Resources */,
+				37B6FDDA15E80AFB0045F82E /* PointCellBackground@2x.png in Resources */,
+				37B6FDDC15E811990045F82E /* RadarTabIcon@2x.png in Resources */,
+				375C369715E82025008194DA /* PointsTabBarIcon@2x.png in Resources */,
+				375C369E15E860C5008194DA /* BlackButton@2x.png in Resources */,
+				375C36A015E8A513008194DA /* GrayButton@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

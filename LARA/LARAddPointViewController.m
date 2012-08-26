@@ -9,6 +9,17 @@
 #import "LARAddPointViewController.h"
 #import "LARDisplayObject.h"
 
+#define kCircle @"circle"
+#define kSquare @"square"
+#define kTriangle @"triangle"
+
+#define kRed @"red"
+#define kBlue @"blue"
+#define kCyan @"cyan"
+#define kYellow @"yellow"
+
+#define kMaxTickerLength 3
+
 @interface LARAddPointViewController ()
 
 - (void)removeOldDisplayObject;
@@ -27,7 +38,8 @@
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
+    if (self)
+    {
         // Custom initialization
     }
     return self;
@@ -37,8 +49,8 @@
 {
     [super viewDidLoad];
     self.tickerTextField.delegate = self;
-    self.thisShape = @"square";
-    self.thisColor = @"red";
+    self.thisShape = kSquare;
+    self.thisColor = kRed;
     [self updateDisplayObject];
     // Do any additional setup after loading the view from its nib.
 }
@@ -75,18 +87,19 @@
 - (IBAction)shapeSegmentedSelector:(id)sender 
 {
     NSInteger choice = [sender selectedSegmentIndex];
-    switch (choice) {
+    switch (choice)
+    {
         case 0:
-            self.thisShape = @"square";
+            self.thisShape = kSquare;
             break;
         case 1:
-            self.thisShape = @"circle";
+            self.thisShape = kCircle;
             break;
         case 2:
-            self.thisShape = @"triangle";
+            self.thisShape = kTriangle;
             break;
         default:
-            self.thisShape = @"square";
+            self.thisShape = kSquare;
             break;
     }
     [self removeOldDisplayObject];
@@ -96,21 +109,22 @@
 - (IBAction)colorSegmentedSelector:(id)sender 
 {
     NSInteger choice = [sender selectedSegmentIndex];
-    switch (choice) {
+    switch (choice)
+    {
         case 0:
-            self.thisColor = @"red";
+            self.thisColor = kRed;
             break;
         case 1:
-            self.thisColor = @"blue";
+            self.thisColor = kBlue;
             break;
         case 2:
-            self.thisColor = @"cyan";
+            self.thisColor = kCyan;
             break;
         case 3:
-            self.thisColor = @"yellow";
+            self.thisColor = kYellow;
             break;
         default:
-            self.thisColor = @"red";
+            self.thisColor = kRed;
             break;
     }
     [self removeOldDisplayObject];
@@ -156,7 +170,7 @@
     
     NSUInteger newLength = oldLength - rangeLength + replacementLength;
     
-    return newLength <= 4;
+    return newLength <= kMaxTickerLength;
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
