@@ -10,7 +10,7 @@
 
 @implementation LARLocationManager
 
-@synthesize manager, currentLocation, currentHeading, hasInitializedPosition, currentVerticalAccuracy, currentHorizontalAccuracy;
+@synthesize manager, currentLocation, currentHeading, hasInitializedPosition, hasInitivializedAuthorization, currentVerticalAccuracy, currentHorizontalAccuracy;
 
 - (id) init
 {
@@ -19,6 +19,7 @@
         self.manager = [[CLLocationManager alloc] init];
         self.manager.delegate = self;
         self.hasInitializedPosition = NO;
+        self.hasInitivializedAuthorization = NO;
     }
     return self;
 }
@@ -47,10 +48,10 @@
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status
 {
-    if (status == kCLAuthorizationStatusAuthorized)
+    if (!hasInitivializedAuthorization)
     {
-        [self.manager startUpdatingHeading];
-        [self.manager startUpdatingLocation];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"serviceStatusSet" object:self];
+        self.hasInitivializedAuthorization = YES;
     }
 }
 
@@ -62,6 +63,11 @@
 - (BOOL)locationManagerShouldDisplayHeadingCalibration:(CLLocationManager *)manager
 {
     return YES;
+}
+
+- (void)resetInitializer
+{
+    self.hasInitializedPosition = NO;
 }
 
 @end

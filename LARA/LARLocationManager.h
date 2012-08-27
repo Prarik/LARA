@@ -16,5 +16,8 @@
 @property (nonatomic) CLLocationAccuracy currentVerticalAccuracy;
 @property (nonatomic) CLLocationAccuracy currentHorizontalAccuracy;
 @property (nonatomic) BOOL hasInitializedPosition;
+@property (nonatomic) BOOL hasInitivializedAuthorization;
+
+- (void)resetInitializer;
 
 @end

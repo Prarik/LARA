@@ -40,6 +40,7 @@
 @property (nonatomic, strong) LARRadarScan *radarScan;
 @property (nonatomic, strong) NSTimer *timerForRadar;
 @property (nonatomic, strong) NSTimer *timerBeforeAnimation;
+@property (nonatomic, strong) NSTimer *initialTimer;
 @property (nonatomic, strong) NSFetchedResultsController *resultsController;
 @property (nonatomic, strong) NSMutableArray *fetchedObjectsForDisplay;
 @property (nonatomic, strong) NSArray *displayObjects;
@@ -60,7 +61,7 @@
 - (void)addDisplayViewsToScreen;
 
 - (void)initialLaunch;
-- (void)authorizeCoreLocation;
+- (void)servicesSettingsSelected;
 
 - (BOOL)stopAnimatingRadar;
 - (void)removeAllRadarPoints;
@@ -73,9 +74,11 @@
 
 @synthesize radarScreen;
 @synthesize isAnimatingRadar;
+@synthesize hasInitializerFired;
 @synthesize isPreparedToSwitchViews;
 @synthesize radarScan;
 @synthesize radarButton;
+@synthesize initialTimer;
 @synthesize timerForRadar;
 @synthesize timerBeforeAnimation;
 @synthesize context;
@@ -115,12 +118,13 @@
     self.isPreparedToSwitchViews = NO;
     self.isTheActiveScreen = YES;
     self.isAnimatingRadar = NO;
-    [self waitForAccuracy];
+    [self authorizeCoreLocation];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    
+    self.isPreparedToSwitchViews = NO;
+    self.hasInitializerFired = NO;
 }
 
 - (void)viewDidUnload
@@ -179,7 +183,11 @@
     }
     else if (authorizationStat == kCLAuthorizationStatusNotDetermined) 
     {
-        // do nada
+        LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
+        LARLocationManager *manager = myAppDel.locationManager;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(servicesSettingsSelected) name:@"serviceStatusSet" object:nil];
+        [manager.manager startUpdatingLocation];
+        [manager.manager startUpdatingHeading];
     }
 }
 
@@ -187,23 +195,41 @@
 {
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     LARLocationManager *manager = myAppDel.locationManager;
+    [manager resetInitializer];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initialLaunch) name:@"locationInitialized" object:nil];
+    [manager resetInitializer];
+    [self.initialTimer invalidate];
+    self.initialTimer = nil;
+    self.initialTimer = [NSTimer scheduledTimerWithTimeInterval:6 target:self selector:@selector(initialLaunch) userInfo:nil repeats:NO];
     [manager.manager startUpdatingLocation];
     [manager.manager startUpdatingHeading];
     [self.activityIndicator startAnimating];
+    self.aquiringDesiredAccuracyLabel.hidden = NO;
 }
 
 - (void)initialLaunch
 {
-    [self.activityIndicator stopAnimating];
-    self.isPreparedToSwitchViews = YES;
-    self.aquiringDesiredAccuracyLabel.hidden = YES;
-    [self fetchRadarObjects];
-    self.timerBeforeAnimation = [NSTimer scheduledTimerWithTimeInterval:1
-                                     target:self
-                                   selector:@selector(radarButtonClicked)
-                                   userInfo:nil
-                                    repeats:NO];
+    if (!hasInitializerFired) 
+    {
+        [self.activityIndicator stopAnimating];
+        self.isTheActiveScreen = YES;
+        self.isPreparedToSwitchViews = YES;
+        self.hasInitializerFired = YES;
+        [self.timerBeforeAnimation invalidate];
+        self.timerBeforeAnimation = nil;
+        self.aquiringDesiredAccuracyLabel.hidden = YES;
+        [self fetchRadarObjects];
+        self.timerBeforeAnimation = [NSTimer scheduledTimerWithTimeInterval:1
+                                                                     target:self
+                                                                   selector:@selector(radarButtonClicked)
+                                                                   userInfo:nil
+                                                                    repeats:NO];
+    }
+}
+
+- (void)servicesSettingsSelected
+{
+    [self authorizeCoreLocation];
 }
 
 #pragma mark - Animate Radar
@@ -333,15 +359,16 @@
 
 - (void)tabBarDidMakeActive
 {
-    self.isTheActiveScreen = YES;
-    [self fetchRadarObjects];
-    [self.timerBeforeAnimation invalidate];
-    self.timerBeforeAnimation = nil;
-    self.timerBeforeAnimation = [NSTimer scheduledTimerWithTimeInterval:2
-                                              target:self
-                                            selector:@selector(radarButtonClicked)
-                                            userInfo:nil
-                                             repeats:NO];
+//    self.isTheActiveScreen = YES;
+//    [self fetchRadarObjects];
+//    [self.timerBeforeAnimation invalidate];
+//    self.timerBeforeAnimation = nil;
+//    self.timerBeforeAnimation = [NSTimer scheduledTimerWithTimeInterval:2
+//                                              target:self
+//                                            selector:@selector(radarButtonClicked)
+//                                            userInfo:nil
+//                                             repeats:NO];
+    [self authorizeCoreLocation];
 }
 
 - (void)fetchRadarObjects

@@ -79,7 +79,13 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    if ([self.rootController selectedViewController] == self.radarController) 
+    {
+        [self.radarController tabBarWillMakeInactive];
+    }
+    [self.rootController setSelectedViewController:self.radarController];
+    [self.radarController viewDidAppear:NO];
+    [self.radarController authorizeCoreLocation];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
@@ -184,8 +190,17 @@
     }
     else 
     {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please wait until the desired location accuracy is initialized." delegate:self cancelButtonTitle:@"OK." otherButtonTitles:nil];
-        [alert show];
+        CLAuthorizationStatus authorizationStat = [CLLocationManager authorizationStatus];
+        if (authorizationStat == kCLAuthorizationStatusDenied || authorizationStat == kCLAuthorizationStatusNotDetermined || authorizationStat == kCLAuthorizationStatusRestricted) 
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please authorize location services to continue." delegate:self cancelButtonTitle:@"OK." otherButtonTitles:nil];
+            [alert show];
+        }
+        else
+        {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:@"Please wait until the desired location accuracy is initialized." delegate:self cancelButtonTitle:@"OK." otherButtonTitles:nil];
+            [alert show];
+        }
         return NO;
     }
 }

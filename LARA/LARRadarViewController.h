@@ -20,9 +20,11 @@
 @property (nonatomic, strong) UITabBarItem *tabBarItem;
 @property (nonatomic) BOOL isTheActiveScreen;
 @property (nonatomic) BOOL isPreparedToSwitchViews;
+@property (nonatomic) BOOL hasInitializerFired;
 
 - (IBAction)radarButtonClicked;
 - (BOOL)tabBarWillMakeInactive;
 - (void)tabBarDidMakeActive;
+- (void)authorizeCoreLocation;
 
 @end
