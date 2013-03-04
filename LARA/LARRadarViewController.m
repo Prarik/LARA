@@ -14,6 +14,7 @@
 #import "LARSquareIcon.h"
 #import "LARAppDelegate.h"
 #import "LARLocationManager.h"
+#import "DDLog.h"
 
 #define kTitle @"Sensor"
 #define kTrackedObject @"TrackedObject"
@@ -97,6 +98,8 @@
 @synthesize activityIndicator;
 @synthesize isTheActiveScreen;
 @synthesize tabBarItem;
+
+static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 #pragma mark - Life Cycle
 
@@ -395,7 +398,7 @@
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     LARLocationManager *manager = myAppDel.locationManager;
     self.mostRecentLocation = manager.currentLocation;
-//    NSLog(@"For mostRecent Lat = %f, Lon = %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
+    DDLogInfo(@"For mostRecent Lat = %f, Lon = %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
 
     
     NSMutableArray *firstDisplayHolder = [[NSMutableArray alloc] init];
@@ -404,21 +407,21 @@
     NSMutableArray *lastDisplayHolder = [[NSMutableArray alloc] init];
     NSNumber *currentLocationLat = [NSNumber numberWithDouble:self.mostRecentLocation.coordinate.latitude];
     NSNumber *currentLocationLon = [NSNumber numberWithDouble:self.mostRecentLocation.coordinate.longitude];
-    //NSLog(@"%f", [currentLocationLat doubleValue]);
+    DDLogInfo(@"%f", [currentLocationLat doubleValue]);
     
     for (TrackedObject *each in chosenObjects)
     {
-        //NSLog(@"%f", [each.lat doubleValue]);
+        DDLogInfo(@"%f", [each.lat doubleValue]);
         CLLocation *trackedObjectsLocation = [[CLLocation alloc] initWithLatitude:[each.lat doubleValue] longitude:[each.lon doubleValue]];
-       // NSLog(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
+        DDLogInfo(@"For Tracked After %f, %f", trackedObjectsLocation.coordinate.latitude, trackedObjectsLocation.coordinate.longitude);
         CLLocationDistance distanceFromCurrentLocation = [trackedObjectsLocation distanceFromLocation:self.mostRecentLocation];
-       // NSLog(@"distance from %@: %f", each.name , distanceFromCurrentLocation);
+        DDLogInfo(@"distance from %@: %f", each.name , distanceFromCurrentLocation);
         if ((distanceFromCurrentLocation < kLocationDistanceThreshold) & ([each.shouldDisplay boolValue]))
         {
             /////////////////////////////////////////////////////////////////////////// Set up a LARDisplayObject.
             
             LARDisplayObject *thisDisplayObject = [[LARDisplayObject alloc] initWithShape:each.iconImageType andColor:each.iconImageColor];
-           // NSLog(@"%@ , %@", each.iconImageType, each.iconImageColor);
+            DDLogInfo(@"%@ , %@", each.iconImageType, each.iconImageColor);
             thisDisplayObject.view.frame = CGRectMake(0, 0, 22, 29);
             thisDisplayObject.view.bounds = CGRectMake(0, 0, 22, 29);
             thisDisplayObject.ticker.text = each.subtitle;
@@ -428,11 +431,11 @@
             
             NSNumber *changeInLat = [NSNumber numberWithDouble:trackedObjectsLocation.coordinate.latitude - [currentLocationLat doubleValue]];
             NSNumber *changeInLon = [NSNumber numberWithDouble:trackedObjectsLocation.coordinate.longitude - [currentLocationLon doubleValue]];
-            //NSLog(@"^Lat %f, ^Lon %f", [changeInLat doubleValue], [changeInLon doubleValue]);
+            DDLogInfo(@"^Lat %f, ^Lon %f", [changeInLat doubleValue], [changeInLon doubleValue]);
             
             NSNumber *magnitudeOfChange = [NSNumber numberWithDouble:sqrt( pow( [changeInLat doubleValue] , 2 ) +
                                                                           pow( [changeInLon doubleValue] , 2 ))];
-            //NSLog(@"%f", [magnitudeOfChange doubleValue]);
+            DDLogInfo(@"%f", [magnitudeOfChange doubleValue]);
             
             ///// Protect against divison by 0
             if ([magnitudeOfChange doubleValue] == 0)
@@ -443,8 +446,8 @@
             ///// Adjust changes to a unit vector in order to find appropriate angle
             changeInLat = [NSNumber numberWithDouble:[changeInLat doubleValue]/[magnitudeOfChange doubleValue]];
             changeInLon = [NSNumber numberWithDouble:[changeInLon doubleValue]/[magnitudeOfChange doubleValue]];
-            //NSLog(@"^Lat %f, ^Lon %f", [changeInLat doubleValue], [changeInLon doubleValue]);
-            //NSLog(@"%f", sqrt( pow( [changeInLat doubleValue] , 2 ) + pow( [changeInLon doubleValue] , 2 )));
+            DDLogInfo(@"^Lat %f, ^Lon %f", [changeInLat doubleValue], [changeInLon doubleValue]);
+            DDLogInfo(@"%f", sqrt( pow( [changeInLat doubleValue] , 2 ) + pow( [changeInLon doubleValue] , 2 )));
             
             ///// Large if to add up angles from true north
             {
@@ -479,7 +482,7 @@
                 else if (( [changeInLat doubleValue] > 0 ) & ( [changeInLon doubleValue] < 0) )
                 {
                     thisDisplayObject.angleFromNorth = [NSNumber numberWithDouble:450-acos([changeInLon doubleValue])*(180/M_PI)];
-                //    NSLog(@"Object's Angle From North = %f", [thisDisplayObject.angleFromNorth doubleValue]);
+                    DDLogInfo(@"Object's Angle From North = %f", [thisDisplayObject.angleFromNorth doubleValue]);
                 }
             }
             
@@ -539,18 +542,18 @@
     for (LARDisplayObject *each in self.thirdRingDisplayObjects) 
     {
         // Adjust angle from true north by currentHeading to correctly place the view
-//        NSLog(@"Magnetic Heading = %d, Angle of Object From North = %d", [magneticHeading intValue], [each.angleFromNorth intValue]); //, (360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360);
+        DDLogInfo(@"Magnetic Heading = %d, Angle of Object From North = %d", [magneticHeading intValue], [each.angleFromNorth intValue]); //, (360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360);
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-//        NSLog(@"Adjusted Heading = %f", [adjustedHeading doubleValue]);
+        DDLogInfo(@"Adjusted Heading = %f", [adjustedHeading doubleValue]);
         each.view.center = CGPointMake(kCenterOfRadarX+kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         
         
-//        NSLog(@"Sin: %f,Cos: %f", sin(M_PI/180*[adjustedHeading doubleValue]), cos(M_PI/180*[adjustedHeading doubleValue]));
-//        NSLog(@"Sin wMag: %f,Cos wMag: %f", kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
-//        NSLog(@"Object view X Coord = %f, Object View Y Coord = %f", each.view.center.x, each.view.center.y);
-//        NSLog(@"--");
-//        NSLog(@"--");
-//        NSLog(@"--");
+        DDLogInfo(@"Sin: %f,Cos: %f", sin(M_PI/180*[adjustedHeading doubleValue]), cos(M_PI/180*[adjustedHeading doubleValue]));
+        DDLogInfo(@"Sin wMag: %f,Cos wMag: %f", kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        DDLogInfo(@"Object view X Coord = %f, Object View Y Coord = %f", each.view.center.x, each.view.center.y);
+        DDLogInfo(@"--");
+        DDLogInfo(@"--");
+        DDLogInfo(@"--");
         [self.view addSubview:each.view];
     }
      

@@ -8,6 +8,7 @@
 
 #import "LARAddPointViewController.h"
 #import "LARDisplayObject.h"
+#import <QuartzCore/QuartzCore.h>
 
 #define kCircle @"circle"
 #define kSquare @"square"
@@ -32,8 +33,9 @@
 @synthesize nameTextField;
 @synthesize tickerTextField;
 @synthesize iconPresentationArea;
+@synthesize addItemButton;
 @synthesize currentDisplayObject;
-@synthesize thisName, thisTicker, thisShape, thisColor;
+@synthesize pointName, pointTicker, pointShape, pointColor;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -49,10 +51,21 @@
 {
     [super viewDidLoad];
     self.tickerTextField.delegate = self;
-    self.thisShape = kSquare;
-    self.thisColor = kRed;
+    self.pointShape = kSquare;
+    self.pointColor = kRed;
     [self updateDisplayObject];
     // Do any additional setup after loading the view from its nib.
+    
+    //Set the background image
+    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"PointCellBackground@2x.png"]];
+    
+    // Set up the custom background for the add item button
+    UIImage *buttonImage = [UIImage imageNamed:@"GrayButton.png"];
+    UIImage *stretchableImage = [buttonImage stretchableImageWithLeftCapWidth:12 topCapHeight:0];
+    [self.addItemButton setBackgroundImage:stretchableImage forState:UIControlStateNormal];
+    CALayer *layer = self.addItemButton.layer;
+    layer.borderColor = [UIColor whiteColor].CGColor;
+    layer.borderWidth = 2.0;
 }
 
 - (void)viewDidUnload
@@ -60,6 +73,7 @@
     [self setNameTextField:nil];
     [self setTickerTextField:nil];
     [self setIconPresentationArea:nil];
+    [self setAddItemButton:nil];
     [super viewDidUnload];
     // Release any retained subviews of the main view.
     // e.g. self.myOutlet = nil;
@@ -78,8 +92,8 @@
 
 - (void)updateDisplayObject
 {
-    self.currentDisplayObject = [[LARDisplayObject alloc] initWithShape:self.thisShape andColor:self.thisColor];
-    self.currentDisplayObject.ticker.text = self.thisTicker;
+    self.currentDisplayObject = [[LARDisplayObject alloc] initWithShape:self.pointShape andColor:self.pointColor];
+    self.currentDisplayObject.ticker.text = self.pointTicker;
     self.currentDisplayObject.view.frame = CGRectMake(150, 45, 20, 29);
     [self.iconPresentationArea addSubview:self.currentDisplayObject.view];
 }
@@ -90,16 +104,16 @@
     switch (choice)
     {
         case 0:
-            self.thisShape = kSquare;
+            self.pointShape = kSquare;
             break;
         case 1:
-            self.thisShape = kCircle;
+            self.pointShape = kCircle;
             break;
         case 2:
-            self.thisShape = kTriangle;
+            self.pointShape = kTriangle;
             break;
         default:
-            self.thisShape = kSquare;
+            self.pointShape = kSquare;
             break;
     }
     [self removeOldDisplayObject];
@@ -112,19 +126,19 @@
     switch (choice)
     {
         case 0:
-            self.thisColor = kRed;
+            self.pointColor = kRed;
             break;
         case 1:
-            self.thisColor = kBlue;
+            self.pointColor = kBlue;
             break;
         case 2:
-            self.thisColor = kCyan;
+            self.pointColor = kCyan;
             break;
         case 3:
-            self.thisColor = kYellow;
+            self.pointColor = kYellow;
             break;
         default:
-            self.thisColor = kRed;
+            self.pointColor = kRed;
             break;
     }
     [self removeOldDisplayObject];
@@ -143,10 +157,11 @@
 
 - (IBAction)addItemButtonPressed 
 {
-    if (([thisName length] > 0) & ([thisTicker length] > 0)) 
+    if (([pointName length] > 0) & ([pointTicker length] > 0)) 
     {
         [self.navigationController popViewControllerAnimated:YES];
-        [delegate addUsersItem];
+        
+        [delegate addPointForName:self.pointName ticker:self.pointTicker shape:self.pointShape color:self.pointColor];
     }
     else 
     {
@@ -180,8 +195,8 @@
 
 - (IBAction)backgroundTap:(id)sender
 {
-    self.thisName = self.nameTextField.text;
-    self.thisTicker = self.tickerTextField.text;
+    self.pointName = self.nameTextField.text;
+    self.pointTicker = self.tickerTextField.text;
     [self removeOldDisplayObject];
     [self updateDisplayObject];
     [self.nameTextField resignFirstResponder];

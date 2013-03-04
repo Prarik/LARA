@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "TrackedObject.h"
 
 @class LARDisplayObject;
 @protocol LARAddPointViewDelegate;
@@ -16,13 +17,14 @@
 @property (strong, nonatomic) IBOutlet UITextField *nameTextField;
 @property (strong, nonatomic) IBOutlet UITextField *tickerTextField;
 @property (strong, nonatomic) IBOutlet UIView *iconPresentationArea;
+@property (weak, nonatomic) IBOutlet UIButton *addItemButton;
 @property (strong, nonatomic) LARDisplayObject *currentDisplayObject;
 @property (assign, nonatomic) id<LARAddPointViewDelegate> delegate;
 
-@property (strong, nonatomic) NSString *thisName;
-@property (strong, nonatomic) NSString *thisTicker;
-@property (strong, nonatomic) NSString *thisShape;
-@property (strong, nonatomic) NSString *thisColor;
+@property (strong, nonatomic) NSString *pointName;
+@property (strong, nonatomic) NSString *pointTicker;
+@property (strong, nonatomic) NSString *pointShape;
+@property (strong, nonatomic) NSString *pointColor;
 
 - (IBAction)shapeSegmentedSelector:(id)sender;
 - (IBAction)colorSegmentedSelector:(id)sender;
@@ -37,6 +39,6 @@
 
 @protocol LARAddPointViewDelegate <NSObject>
 
-- (void)addUsersItem;
+- (void)addPointForName:(NSString *)pointName ticker:(NSString *)pointTicker shape:(NSString *)pointShape color:(NSString *)pointColor;
 
 @end

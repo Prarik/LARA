@@ -11,6 +11,7 @@
 #import "LARRadarPointsViewController.h"
 #import "LARLocationManager.h"
 #import <CoreLocation/CoreLocation.h>
+#import "DDLog.h"
 
 @implementation LARAppDelegate
 
@@ -21,6 +22,8 @@
 @synthesize managedObjectModel = __managedObjectModel;
 @synthesize persistentStoreCoordinator = __persistentStoreCoordinator;
 @synthesize locationManager = _locationManager;
+
+static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
@@ -102,7 +105,7 @@
     {
         if ([managedObjectContext hasChanges] && ![managedObjectContext save:&error])
         {
-            NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+            DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
             abort();
         } 
     }
@@ -157,7 +160,7 @@
     if (![__persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])
     {
 
-        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        DDLogError(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }    
     

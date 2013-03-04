@@ -26,6 +26,11 @@
 		37FC6B52159907A5000EF93F /* LARRadarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B50159907A5000EF93F /* LARRadarViewController.m */; };
 		37FC6B53159907A5000EF93F /* LARRadarView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 37FC6B51159907A5000EF93F /* LARRadarView.xib */; };
 		37FC6B561599084A000EF93F /* LARRadarPointsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */; };
+		6602754516E3F4590076077A /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6602754216E3F4590076077A /* Default-568h@2x.png */; };
+		6602754616E3F4590076077A /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 6602754316E3F4590076077A /* Default.png */; };
+		6602754716E3F4590076077A /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6602754416E3F4590076077A /* Default@2x.png */; };
+		6602755616E42D460076077A /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 6602755416E42D460076077A /* icon.png */; };
+		6602755716E42D460076077A /* icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 6602755516E42D460076077A /* icon@2x.png */; };
 		6F052A2915D379EB00DA9B82 /* LARDisplayObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F052A2815D379EB00DA9B82 /* LARDisplayObject.m */; };
 		6F052A2D15D37BED00DA9B82 /* LARLocationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F052A2C15D37BED00DA9B82 /* LARLocationManager.m */; };
 		6F127FF515D5A2AF00ABC44F /* LARCircleIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6F127FF415D5A2AF00ABC44F /* LARCircleIcon.m */; };
@@ -39,9 +44,11 @@
 		6FC6AFB215DD7A5700E3CC16 /* LARShapeIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FC6AFB115DD7A5700E3CC16 /* LARShapeIcon.m */; };
 		6FF72EA215DC22F40019FC7F /* LARAddPointViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6FF72EA015DC22F40019FC7F /* LARAddPointViewController.m */; };
 		6FF72EA315DC22F40019FC7F /* LARAddPointViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6FF72EA115DC22F40019FC7F /* LARAddPointViewController.xib */; };
+		BCFD5AAFCC224143BD683436 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02C552C0922E4D06A5C2BE1A /* libPods.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		02C552C0922E4D06A5C2BE1A /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3744D99C159BA36500CC687F /* LARRadarPointCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarPointCell.h; sourceTree = "<group>"; };
 		3744D99D159BA36500CC687F /* LARRadarPointCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointCell.m; sourceTree = "<group>"; };
 		3744D99F159BA37B00CC687F /* LARRadarPointCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarPointCell.xib; sourceTree = "<group>"; };
@@ -69,6 +76,11 @@
 		37FC6B51159907A5000EF93F /* LARRadarView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARRadarView.xib; sourceTree = "<group>"; };
 		37FC6B541599084A000EF93F /* LARRadarPointsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARRadarPointsViewController.h; sourceTree = "<group>"; };
 		37FC6B551599084A000EF93F /* LARRadarPointsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARRadarPointsViewController.m; sourceTree = "<group>"; };
+		6602754216E3F4590076077A /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		6602754316E3F4590076077A /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		6602754416E3F4590076077A /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		6602755416E42D460076077A /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
+		6602755516E42D460076077A /* icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon@2x.png"; sourceTree = "<group>"; };
 		6F052A2715D379EB00DA9B82 /* LARDisplayObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARDisplayObject.h; sourceTree = "<group>"; };
 		6F052A2815D379EB00DA9B82 /* LARDisplayObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARDisplayObject.m; sourceTree = "<group>"; };
 		6F052A2B15D37BED00DA9B82 /* LARLocationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARLocationManager.h; sourceTree = "<group>"; };
@@ -92,6 +104,7 @@
 		6FF72E9F15DC22F40019FC7F /* LARAddPointViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LARAddPointViewController.h; sourceTree = "<group>"; };
 		6FF72EA015DC22F40019FC7F /* LARAddPointViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LARAddPointViewController.m; sourceTree = "<group>"; };
 		6FF72EA115DC22F40019FC7F /* LARAddPointViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LARAddPointViewController.xib; sourceTree = "<group>"; };
+		CEEF17B61B004653A36EA2F6 /* Pods.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.xcconfig; path = Pods/Pods.xcconfig; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -104,6 +117,7 @@
 				37FC6B32159905F9000EF93F /* Foundation.framework in Frameworks */,
 				37FC6B34159905F9000EF93F /* CoreGraphics.framework in Frameworks */,
 				37FC6B36159905F9000EF93F /* CoreData.framework in Frameworks */,
+				BCFD5AAFCC224143BD683436 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,6 +130,7 @@
 				37FC6B37159905F9000EF93F /* LARA */,
 				37FC6B2E159905F9000EF93F /* Frameworks */,
 				37FC6B2C159905F9000EF93F /* Products */,
+				CEEF17B61B004653A36EA2F6 /* Pods.xcconfig */,
 			);
 			sourceTree = "<group>";
 		};
@@ -135,6 +150,7 @@
 				37FC6B33159905F9000EF93F /* CoreGraphics.framework */,
 				37FC6B35159905F9000EF93F /* CoreData.framework */,
 				6F30AA2D159ACE460016DF55 /* CoreLocation.framework */,
+				02C552C0922E4D06A5C2BE1A /* libPods.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -142,10 +158,11 @@
 		37FC6B37159905F9000EF93F /* LARA */ = {
 			isa = PBXGroup;
 			children = (
-				37FC6B4E159906D3000EF93F /* Delegates */,
+				37FC6B4E159906D3000EF93F /* Delegate */,
 				37FC6B4D159906CC000EF93F /* Controllers */,
 				37FC6B4C159906C4000EF93F /* Model */,
 				37FC6B4B159906BF000EF93F /* Views */,
+				6F8571F315994C060095DFCB /* Resources */,
 				37FC6B38159905F9000EF93F /* Supporting Files */,
 			);
 			path = LARA;
@@ -154,7 +171,6 @@
 		37FC6B38159905F9000EF93F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				6F8571F315994C060095DFCB /* Images */,
 				37FC6B39159905F9000EF93F /* LARA-Info.plist */,
 				37FC6B3A159905F9000EF93F /* InfoPlist.strings */,
 				37FC6B3D159905F9000EF93F /* main.m */,
@@ -214,18 +230,23 @@
 			name = Controllers;
 			sourceTree = "<group>";
 		};
-		37FC6B4E159906D3000EF93F /* Delegates */ = {
+		37FC6B4E159906D3000EF93F /* Delegate */ = {
 			isa = PBXGroup;
 			children = (
 				37FC6B40159905F9000EF93F /* LARAppDelegate.h */,
 				37FC6B41159905F9000EF93F /* LARAppDelegate.m */,
 			);
-			name = Delegates;
+			name = Delegate;
 			sourceTree = "<group>";
 		};
-		6F8571F315994C060095DFCB /* Images */ = {
+		6F8571F315994C060095DFCB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				6602755416E42D460076077A /* icon.png */,
+				6602755516E42D460076077A /* icon@2x.png */,
+				6602754216E3F4590076077A /* Default-568h@2x.png */,
+				6602754316E3F4590076077A /* Default.png */,
+				6602754416E3F4590076077A /* Default@2x.png */,
 				375C369F15E8A513008194DA /* GrayButton@2x.png */,
 				375C369D15E860C5008194DA /* BlackButton@2x.png */,
 				375C369615E82025008194DA /* PointsTabBarIcon@2x.png */,
@@ -234,7 +255,7 @@
 				37B6FDD615E7EB360045F82E /* RadarScreenBackground.png */,
 				6F8571F71599500A0095DFCB /* Radarprac2.png */,
 			);
-			name = Images;
+			name = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -247,6 +268,7 @@
 				37FC6B27159905F9000EF93F /* Sources */,
 				37FC6B28159905F9000EF93F /* Frameworks */,
 				37FC6B29159905F9000EF93F /* Resources */,
+				25D8F6ED47D04BD291BA3FAE /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -300,10 +322,32 @@
 				375C369715E82025008194DA /* PointsTabBarIcon@2x.png in Resources */,
 				375C369E15E860C5008194DA /* BlackButton@2x.png in Resources */,
 				375C36A015E8A513008194DA /* GrayButton@2x.png in Resources */,
+				6602754516E3F4590076077A /* Default-568h@2x.png in Resources */,
+				6602754616E3F4590076077A /* Default.png in Resources */,
+				6602754716E3F4590076077A /* Default@2x.png in Resources */,
+				6602755616E42D460076077A /* icon.png in Resources */,
+				6602755716E42D460076077A /* icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		25D8F6ED47D04BD291BA3FAE /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Pods-resources.sh\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		37FC6B27159905F9000EF93F /* Sources */ = {
@@ -390,6 +434,7 @@
 		};
 		37FC6B49159905F9000EF93F /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEEF17B61B004653A36EA2F6 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LARA/LARA-Prefix.pch";
@@ -402,6 +447,7 @@
 		};
 		37FC6B4A159905F9000EF93F /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CEEF17B61B004653A36EA2F6 /* Pods.xcconfig */;
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LARA/LARA-Prefix.pch";
