@@ -7,10 +7,13 @@
 //
 
 #import "LARLocationManager.h"
+#import "DDLog.h"
 
 @implementation LARLocationManager
 
 @synthesize manager, currentLocation, currentHeading, hasInitializedPosition, hasInitivializedAuthorization, currentVerticalAccuracy, currentHorizontalAccuracy;
+
+static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (id) init
 {
@@ -30,8 +33,8 @@
     self.currentVerticalAccuracy = newLocation.verticalAccuracy;
     self.currentHorizontalAccuracy = newLocation.horizontalAccuracy;
     
-    //NSLog(@"horizontal location accuracy: %f", newLocation.horizontalAccuracy);
-    //NSLog(@"%u", (int)newLocation.horizontalAccuracy);
+    DDLogInfo(@"horizontal location accuracy: %f", newLocation.horizontalAccuracy);
+    DDLogInfo(@"%u", (int)newLocation.horizontalAccuracy);
     
     if ((newLocation.verticalAccuracy < 40) & (newLocation.horizontalAccuracy < 40) & !hasInitializedPosition)
     {
@@ -43,7 +46,7 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateHeading:(CLHeading *)newHeading
 {
     self.currentHeading = newHeading;
-    //NSLog(@"%f", newHeading.magneticHeading);
+    DDLogInfo(@"%f", newHeading.magneticHeading);
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status

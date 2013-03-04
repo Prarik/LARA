@@ -15,6 +15,7 @@
 #import "LARTriangleIcon.h"
 #import "LARLocationManager.h"
 #import "LARRadarPointCell.h"
+#import "DDLog.h"
 
 #define kTitle @"Points"
 
@@ -52,6 +53,8 @@
 @synthesize addItemController;
 @synthesize manager = _manager;
 @synthesize tabBarItem;
+
+static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 #pragma mark - User Interaction Methods
 
@@ -171,7 +174,7 @@
     TrackedObject *currentTrackedObject = [self.fetchResults objectAtIndexPath:indexPath];
     cell.nameLabel.text = currentTrackedObject.name;
     cell.subLabel.text = currentTrackedObject.subtitle;
-    
+        
     // Set up the custom backgrounds for the buttons
     UIImage *buttonImage = [UIImage imageNamed:@"GrayButton.png"];
     UIImage *stretchableImage = [buttonImage stretchableImageWithLeftCapWidth:12 topCapHeight:0];
@@ -200,6 +203,9 @@
     
     // Add icon to cell
     [cell.iconView addSubview:icon];
+    
+    //Set the background view
+    cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"PointCellBackground@2x.png"]];
     
     return cell;
 }
@@ -324,23 +330,23 @@
     
     if(error)
     {
-        NSLog(@"ERROR: %@", [error localizedDescription]);
+        DDLogError(@"ERROR: %@", [error localizedDescription]);
     }
     
 }
 
 #pragma mark - LARAddItemDelegate Methods
 
-- (void)addUsersItem
+- (void)addPointForName:(NSString *)pointName ticker:(NSString *)pointTicker shape:(NSString *)pointShape color:(NSString *)pointColor
 {
     CLLocation *gottenLocation = self.manager.currentLocation;
     TrackedObject *trackedObject = [NSEntityDescription insertNewObjectForEntityForName:kTrackedObject inManagedObjectContext:self.context];
-    trackedObject.name = addItemController.thisName;
-    trackedObject.subtitle = addItemController.thisTicker;
+    trackedObject.name = pointName;
+    trackedObject.subtitle = pointTicker;
     trackedObject.lat = [NSNumber numberWithDouble:gottenLocation.coordinate.latitude];
     trackedObject.lon = [NSNumber numberWithDouble:gottenLocation.coordinate.longitude];
-    trackedObject.iconImageColor = addItemController.thisColor;
-    trackedObject.iconImageType = addItemController.thisShape;
+    trackedObject.iconImageColor = pointColor;
+    trackedObject.iconImageType = pointShape;
     trackedObject.shouldDisplay = [NSNumber numberWithBool:YES];
     
     [self save];
@@ -359,7 +365,7 @@
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
     // Get the tracked Object associated with it and update it's location.
     TrackedObject *trackedObject = [self.fetchResults objectAtIndexPath:indexPathForButton];
-    NSLog(@"%@", trackedObject.name);
+    DDLogInfo(@"%@", trackedObject.name);
     CLLocation *gottenLocation = self.manager.currentLocation;
 
     trackedObject.lat = [NSNumber numberWithFloat:gottenLocation.coordinate.latitude];
