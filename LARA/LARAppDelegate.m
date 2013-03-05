@@ -179,7 +179,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController
 {
-    if (self.radarController.isPreparedToSwitchViews) 
+    if (self.radarController.isPreparedToSwitchViews)
     {
         if (viewController == self.radarController) 
         {
