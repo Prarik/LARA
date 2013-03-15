@@ -64,8 +64,11 @@
     UIImage *stretchableImage = [buttonImage stretchableImageWithLeftCapWidth:12 topCapHeight:0];
     [self.addItemButton setBackgroundImage:stretchableImage forState:UIControlStateNormal];
     CALayer *layer = self.addItemButton.layer;
-    layer.borderColor = [UIColor whiteColor].CGColor;
-    layer.borderWidth = 2.0;
+    layer.shadowColor = [UIColor whiteColor].CGColor;
+    layer.shadowOpacity = 0.30;
+    layer.shadowOffset = CGSizeMake(-0.70, -0.70);
+//    layer.borderColor = [UIColor whiteColor].CGColor;
+//    layer.borderWidth = 2.0;
 }
 
 - (void)viewDidUnload
