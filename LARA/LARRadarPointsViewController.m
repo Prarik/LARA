@@ -26,7 +26,7 @@
 #define kHide @"Hide"
 #define kDisplay @"Display"
 
-#define kSortKey @"name"
+#define kSortKey @"viewPosition"
 
 #define kRowHeight 92
 
@@ -89,6 +89,8 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     
     NSError *anyError = nil;
     [self.fetchResults performFetch:&anyError];
+    
+    self.trackedObjectsArray = [[self.fetchResults fetchedObjects] mutableCopy];
 }
 
 #pragma mark - Inherited
@@ -138,16 +140,20 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    NSInteger counted = [[self.fetchResults sections] count];
-    return counted;
+    /*NSInteger counted = [[self.fetchResults sections] count];
+    return counted;*/
+    
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchResults sections] objectAtIndex:section];
+    /*id <NSFetchedResultsSectionInfo> sectionInfo = [[self.fetchResults sections] objectAtIndex:section];
     NSInteger rowsInSection = [sectionInfo numberOfObjects];
     
-    return rowsInSection;
+    return rowsInSection;*/
+    
+    return [self.trackedObjectsArray count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -171,7 +177,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     }
     
     // Configure the cell...
-    TrackedObject *currentTrackedObject = [self.fetchResults objectAtIndexPath:indexPath];
+    TrackedObject *currentTrackedObject = [self.trackedObjectsArray objectAtIndex:indexPath.row];
     cell.nameLabel.text = currentTrackedObject.name;
     cell.subLabel.text = currentTrackedObject.subtitle;
         
@@ -233,17 +239,30 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self.tableView beginUpdates];
+    
     if (editingStyle == UITableViewCellEditingStyleDelete)
     {
+        // The tracked object to delete
+        TrackedObject *trackedObject = [self.trackedObjectsArray objectAtIndex:indexPath.row];
+        
         // Delete the row from the data source
-        [self.context deleteObject: [self.fetchResults objectAtIndexPath:indexPath]];
-        [self save];
-    }   
+        [self.context deleteObject:trackedObject];
+        
+        // Delete the row from the tracked objects array which populates the table view
+        [self.trackedObjectsArray removeObject:trackedObject];
+        
+        // Delete the row from the table view
+        [self.tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    }
     else if (editingStyle == UITableViewCellEditingStyleInsert)
     {
         // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        
     }
+        
+    [self.tableView endUpdates];
+    
+    [self save];
 }
 
 // Override to support conditional rearranging of the table view.
@@ -253,25 +272,24 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 }
 
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath;
-{
-    NSMutableArray *trackedObjects = [[self.fetchResults fetchedObjects] mutableCopy];
-    
+{    
     // Grab the item we're moving.
-    TrackedObject *trackedObject = [self.fetchResults objectAtIndexPath:sourceIndexPath];
+    TrackedObject *trackedObject = [self.trackedObjectsArray objectAtIndex:sourceIndexPath.row];
     
     // Remove the object we're moving from the array.
-    [trackedObjects removeObject:trackedObject];
+    [self.trackedObjectsArray removeObject:trackedObject];
+    
     // Now re-insert it at the destination.
-    [trackedObjects insertObject:trackedObject atIndex:[destinationIndexPath row]];
+    [self.trackedObjectsArray insertObject:trackedObject atIndex:[destinationIndexPath row]];
     
     // All of the objects are now in their correct order. Update each
     // object's displayOrder field by iterating through the array.
     int i = 0;
-    for (TrackedObject *each in trackedObjects)
+    for (TrackedObject *each in self.trackedObjectsArray)
     {
-        each.viewPosition =  [NSNumber numberWithInt:i++];
+        each.viewPosition = [NSNumber numberWithInt:i++];
     }
-    
+
     [self save];
 }
 
@@ -283,7 +301,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     return;
 }
 
-#pragma mark - NSFetchedResultsControllerDelegate Methods
+/*#pragma mark - NSFetchedResultsControllerDelegate Methods
 
 - (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type newIndexPath:(NSIndexPath *)newIndexPath
 {
@@ -313,13 +331,13 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
             TrackedObject *trackedObject = [controller objectAtIndexPath:indexPath];
             
             larCell.nameLabel.text = trackedObject.name;
-            larCell.subLabel.text = trackedObject.subtitle;
+            larCell.subLabel.text = trackedObject.subtitle;       
         }
             break;
         default:
             break;
     }
-}
+}*/
 
 - (void)save
 {
@@ -349,6 +367,21 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     trackedObject.iconImageType = pointShape;
     trackedObject.shouldDisplay = [NSNumber numberWithBool:YES];
     
+    // Set the new tracked object's view position to be the last row
+    trackedObject.viewPosition = [NSNumber numberWithInt:[self.trackedObjectsArray count]];
+    
+    // Create a new index path for the new row to be inserted
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:[self.trackedObjectsArray count] inSection:0];
+    
+    //Add the tracked object to the tracked objects array so that the table view has the new row
+    [self.trackedObjectsArray addObject:trackedObject];
+        
+    [self.tableView beginUpdates];
+    
+    [self.tableView insertRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationTop];
+    
+    [self.tableView endUpdates];
+        
     [self save];
 
     self.addItemController = nil;
@@ -364,7 +397,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
     // Get the tracked Object associated with it and update it's location.
-    TrackedObject *trackedObject = [self.fetchResults objectAtIndexPath:indexPathForButton];
+    TrackedObject *trackedObject = [self.trackedObjectsArray objectAtIndex:indexPathForButton.row];
     DDLogInfo(@"%@", trackedObject.name);
     CLLocation *gottenLocation = self.manager.currentLocation;
 
@@ -386,8 +419,8 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 {
     UIButton *senderButton = (UIButton *)sender;
     UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
-    NSIndexPath *buttonRow = [self.tableView indexPathForCell:buttonCell];
-    TrackedObject *trackedObject = [self.fetchResults objectAtIndexPath:buttonRow];
+    NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
+    TrackedObject *trackedObject = [self.trackedObjectsArray objectAtIndex:indexPathForButton.row];
     if ([trackedObject.shouldDisplay boolValue]) 
     {
         trackedObject.shouldDisplay = [NSNumber numberWithBool:NO];

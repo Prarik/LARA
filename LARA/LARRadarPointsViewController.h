@@ -19,6 +19,7 @@
 @property (nonatomic, strong) LARAddPointViewController *addItemController;
 @property (nonatomic, strong) LARLocationManager *manager;
 @property (nonatomic, strong) UITabBarItem *tabBarItem;
+@property (nonatomic, strong) NSMutableArray *trackedObjectsArray;
 
 - (void)getData;
 

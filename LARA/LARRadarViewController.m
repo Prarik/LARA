@@ -122,12 +122,31 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     self.isTheActiveScreen = YES;
     self.isAnimatingRadar = NO;
     [self authorizeCoreLocation];
+    
+    DDLogInfo(@"viewDidLoad");
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
-    self.isPreparedToSwitchViews = NO;
-    self.hasInitializerFired = NO;
+    if (!self.viewDidAppearLock) {
+        
+        self.viewDidAppearLock = YES;
+        
+        self.isPreparedToSwitchViews = NO;
+        self.hasInitializerFired = NO;
+        
+        DDLogInfo(@"viewDidAppear");
+    }
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    if (self.viewDidAppearLock) {
+        
+        self.viewDidAppearLock = NO;
+        
+        DDLogInfo(@"viewDidDisappear");
+    }
 }
 
 - (void)viewDidUnload
@@ -212,7 +231,9 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (void)initialLaunch
 {
-    if (!hasInitializerFired) 
+    DDLogInfo(@"initialLaunch: %d", hasInitializerFired);
+    
+    if (!hasInitializerFired)
     {
         [self.activityIndicator stopAnimating];
         self.isTheActiveScreen = YES;
