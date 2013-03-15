@@ -21,6 +21,8 @@
 @property (nonatomic) BOOL isTheActiveScreen;
 @property (nonatomic) BOOL isPreparedToSwitchViews;
 @property (nonatomic) BOOL hasInitializerFired;
+@property (nonatomic) BOOL viewDidAppearLock;
+
 
 - (IBAction)radarButtonClicked;
 - (BOOL)tabBarWillMakeInactive;
