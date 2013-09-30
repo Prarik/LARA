@@ -50,6 +50,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     self.tickerTextField.delegate = self;
     self.pointShape = kSquare;
     self.pointColor = kRed;
@@ -57,7 +58,7 @@
     // Do any additional setup after loading the view from its nib.
     
     //Set the background image
-    self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"PointCellBackground@2x.png"]];
+    //self.view.backgroundColor = [UIColor colorWithPatternImage:[UIImage imageNamed:@"PointCellBackground@2x.png"]];
     
     // Set up the custom background for the add item button
     UIImage *buttonImage = [UIImage imageNamed:@"GrayButton.png"];

@@ -39,7 +39,8 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     radarPoints.manager = self.locationManager;
     
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:radarPoints];
-    navController.navigationBar.tintColor = [UIColor blackColor];
+    navController.navigationBar.tintColor = [UIColor whiteColor];
+    navController.navigationBar.barTintColor = [UIColor blackColor];
         
     self.rootController = [[UITabBarController alloc] init];
     self.rootController.delegate = self;
@@ -47,6 +48,9 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     NSArray *controllerArray = [[NSArray alloc] initWithObjects:radarController, navController, nil];
     
     self.rootController.viewControllers = controllerArray;
+    self.rootController.tabBar.backgroundColor = [UIColor blackColor];
+    self.rootController.tabBar.barTintColor = [UIColor blackColor];
+    self.rootController.tabBar.tintColor = [UIColor whiteColor];
     
     //[self.window addSubview:self.rootController.view];
     self.window.rootViewController = _rootController;
@@ -181,13 +185,16 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 {
     if (self.radarController.isPreparedToSwitchViews)
     {
-        if (viewController == self.radarController) 
+        if ((viewController == self.radarController) && (tabBarController.selectedViewController != self.radarController))
         {
-            // do nada
+            [self.radarController tabBarDidMakeActive];
         }
         else
         {
-            [self.radarController tabBarWillMakeInactive];
+            if (viewController != self.radarController)
+            {
+                [self.radarController tabBarWillMakeInactive];
+            }
         }
         return YES;
     }
@@ -208,16 +215,16 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     }
 }
 
-- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
-{
-    if (viewController == self.radarController) 
-    {
-        [self.radarController tabBarDidMakeActive];
-    }
-    else 
-    {
-        // do nada
-    }
-}
+//- (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController
+//{
+//    if ((viewController == self.radarController) && (tabBarController.selectedViewController != viewController))
+//    {
+//        [self.radarController tabBarDidMakeActive];
+//    }
+//    else 
+//    {
+//        // do nada
+//    }
+//}
 
 @end

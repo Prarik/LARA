@@ -111,6 +111,8 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.barTintColor = [UIColor blackColor];
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     self.navigationItem.leftBarButtonItem = self.editButtonItem;
     
     [self getData];
@@ -211,7 +213,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     [cell.iconView addSubview:icon];
     
     //Set the background view
-    cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"PointCellBackground@2x.png"]];
+    //cell.backgroundView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"PointCellBackground@2x.png"]];
     
     return cell;
 }
@@ -394,7 +396,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     // Find the row of the button tapped.
     UIButton *senderButton = (UIButton *)sender;
     
-    UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
+    UITableViewCell *buttonCell = (UITableViewCell *)[[[senderButton superview] superview] superview];
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
     // Get the tracked Object associated with it and update it's location.
     TrackedObject *trackedObject = [self.trackedObjectsArray objectAtIndex:indexPathForButton.row];
@@ -418,7 +420,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 - (IBAction)cellDisplayRemoveButtonTapped:(id)sender
 {
     UIButton *senderButton = (UIButton *)sender;
-    UITableViewCell *buttonCell = (UITableViewCell *)[[senderButton superview] superview];
+    UITableViewCell *buttonCell = (UITableViewCell *)[[[senderButton superview] superview] superview];
     NSIndexPath *indexPathForButton = [self.tableView indexPathForCell:buttonCell];
     TrackedObject *trackedObject = [self.trackedObjectsArray objectAtIndex:indexPathForButton.row];
     if ([trackedObject.shouldDisplay boolValue]) 

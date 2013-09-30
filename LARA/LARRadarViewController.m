@@ -22,6 +22,7 @@
 #define kCenterOfRadarY 196
 
 #define kLocationDistanceThreshold 1500
+#define kReachedDistanceThreshold 20
 #define kFirstRingDistanceThreshold 50
 #define kSecondRingDistanceThreshold 150
 #define kThirdRingDistanceThreshold 500
@@ -48,10 +49,14 @@
 @property (nonatomic, strong) CLLocation *mostRecentLocation;
 @property (nonatomic, strong) CLHeading *mostRecentHeading;
 
+@property (nonatomic, strong) NSArray *reachedDisplayObjects;
 @property (nonatomic, strong) NSArray *firstRingDisplayObjects;
 @property (nonatomic, strong) NSArray *secondRingDisplayObjects;
 @property (nonatomic, strong) NSArray *thirdRingDisplayObjects;
 @property (nonatomic, strong) NSArray *lastRingDisplayObjects;
+
+@property (nonatomic) int centerOfRadarY;
+@property (nonatomic) int centerOfRadarX;
 
 - (void)loadRadarScan;
 - (void)animateRadar;
@@ -103,6 +108,11 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 #pragma mark - Life Cycle
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
+}
+
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -118,6 +128,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.isPreparedToSwitchViews = NO;
     self.isTheActiveScreen = YES;
     self.isAnimatingRadar = NO;
@@ -171,7 +182,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     {
         self.radarScan = nil;
     }
-    self.radarScan = [[LARRadarScan alloc] initWithFrame:kRadarScanOrigin];
+    self.radarScan = [[LARRadarScan alloc] initWithFrame:CGRectMake(_centerOfRadarX-11, _centerOfRadarY-11, 22, 22)];
     [self.view addSubview:radarScan];
 }
 
@@ -217,16 +228,16 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 {
     LARAppDelegate *myAppDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     LARLocationManager *manager = myAppDel.locationManager;
-    [manager resetInitializer];
+    [self.activityIndicator startAnimating];
+    self.aquiringDesiredAccuracyLabel.hidden = NO;
+    self.hasInitializerFired = NO;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(initialLaunch) name:@"locationInitialized" object:nil];
+    [manager.manager startUpdatingLocation];
+    [manager.manager startUpdatingHeading];
     [manager resetInitializer];
     [self.initialTimer invalidate];
     self.initialTimer = nil;
     self.initialTimer = [NSTimer scheduledTimerWithTimeInterval:6 target:self selector:@selector(initialLaunch) userInfo:nil repeats:NO];
-    [manager.manager startUpdatingLocation];
-    [manager.manager startUpdatingHeading];
-    [self.activityIndicator startAnimating];
-    self.aquiringDesiredAccuracyLabel.hidden = NO;
 }
 
 - (void)initialLaunch
@@ -330,6 +341,13 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 {
     CGRect temp = self.radarScan.frame;
     NSNumber *magnitude = [NSNumber numberWithDouble:temp.size.height/2];
+    if (([magnitude doubleValue] > 0) & !([magnitude doubleValue] > 40))
+    {
+        for (LARDisplayObject *each in self.reachedDisplayObjects)
+        {
+            each.view.alpha +=0.1;
+        }
+    }
     if (([magnitude doubleValue] > 35) & !([magnitude doubleValue] > 70)) 
     {
         for (LARDisplayObject *each in self.firstRingDisplayObjects) 
@@ -376,6 +394,10 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         {
             each.view.alpha -=0.06;
         }
+        for (LARDisplayObject *each in self.reachedDisplayObjects)
+        {
+            each.view.alpha -=0.06;
+        }
     }
 }
 
@@ -383,15 +405,6 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (void)tabBarDidMakeActive
 {
-//    self.isTheActiveScreen = YES;
-//    [self fetchRadarObjects];
-//    [self.timerBeforeAnimation invalidate];
-//    self.timerBeforeAnimation = nil;
-//    self.timerBeforeAnimation = [NSTimer scheduledTimerWithTimeInterval:2
-//                                              target:self
-//                                            selector:@selector(radarButtonClicked)
-//                                            userInfo:nil
-//                                             repeats:NO];
     [self authorizeCoreLocation];
 }
 
@@ -421,7 +434,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     self.mostRecentLocation = manager.currentLocation;
     DDLogInfo(@"For mostRecent Lat = %f, Lon = %f", self.mostRecentLocation.coordinate.latitude, self.mostRecentLocation.coordinate.longitude);
 
-    
+    NSMutableArray *reachedDisplayHolder = [[NSMutableArray alloc] init];
     NSMutableArray *firstDisplayHolder = [[NSMutableArray alloc] init];
     NSMutableArray *secondDisplayHolder = [[NSMutableArray alloc] init];
     NSMutableArray *thirdDisplayHolder = [[NSMutableArray alloc] init];
@@ -509,7 +522,11 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
             
             /////////////////////////////////////////////////////////////////////////// Sort object into correct holding array.
             
-            if (distanceFromCurrentLocation < kFirstRingDistanceThreshold)
+            if (distanceFromCurrentLocation < kReachedDistanceThreshold)
+            {
+                [reachedDisplayHolder addObject:thisDisplayObject];
+            }
+            if ((distanceFromCurrentLocation < kFirstRingDistanceThreshold) & (distanceFromCurrentLocation >= kReachedDistanceThreshold))
             {
                 [firstDisplayHolder addObject:thisDisplayObject];
             }
@@ -531,6 +548,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     
     /////////////////////////////////////////////////////////////////////////// Convert mutable holding arrays into corresponding NSArray properties for the coming animation.
     
+    self.reachedDisplayObjects = [reachedDisplayHolder copy];
     self.firstRingDisplayObjects = [firstDisplayHolder copy];
     self.secondRingDisplayObjects = [secondDisplayHolder copy];
     self.thirdRingDisplayObjects = [thirdDisplayHolder copy];
@@ -538,17 +556,29 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 }
 
 - (void)addDisplayViewsToScreen
-{ 
+{
+    CGPoint centerForScan = radarScreen.center;
+    _centerOfRadarX = centerForScan.x;
+    _centerOfRadarY = centerForScan.y;
+    
     LARAppDelegate *appDel = (LARAppDelegate *)[[UIApplication sharedApplication] delegate];
     self.mostRecentHeading = appDel.locationManager.currentHeading;
     NSNumber *magneticHeading = [NSNumber numberWithDouble:appDel.locationManager.currentHeading.magneticHeading];
     
-    for (LARDisplayObject *each in self.firstRingDisplayObjects) 
+    int numberReached = [self.reachedDisplayObjects count];
+    for (LARDisplayObject *each in self.reachedDisplayObjects)
+    {
+        // Adjust angle from true north by currentHeading to correctly place the view
+        each.view.center = CGPointMake(_centerOfRadarX-2*(numberReached-1) + 4 * [self.reachedDisplayObjects indexOfObject:each], _centerOfRadarY);
+        [self.view addSubview:each.view];
+    }
+    
+    for (LARDisplayObject *each in self.firstRingDisplayObjects)
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
         
-        each.view.center = CGPointMake(kCenterOfRadarX+kFirstRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kFirstRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        each.view.center = CGPointMake(_centerOfRadarX+kFirstRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), _centerOfRadarY-kFirstRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         [self.view addSubview:each.view];
     }
      
@@ -556,7 +586,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.view.center = CGPointMake(kCenterOfRadarX+kSecondRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kSecondRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        each.view.center = CGPointMake(_centerOfRadarX+kSecondRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), _centerOfRadarY-kSecondRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         [self.view addSubview:each.view];
     }
      
@@ -566,7 +596,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         DDLogInfo(@"Magnetic Heading = %d, Angle of Object From North = %d", [magneticHeading intValue], [each.angleFromNorth intValue]); //, (360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360);
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
         DDLogInfo(@"Adjusted Heading = %f", [adjustedHeading doubleValue]);
-        each.view.center = CGPointMake(kCenterOfRadarX+kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        each.view.center = CGPointMake(_centerOfRadarX+kThirdRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), _centerOfRadarY-kThirdRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         
         
         DDLogInfo(@"Sin: %f,Cos: %f", sin(M_PI/180*[adjustedHeading doubleValue]), cos(M_PI/180*[adjustedHeading doubleValue]));
@@ -582,7 +612,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
     {
         // Adjust angle from true north by currentHeading to correctly place the view
         NSNumber *adjustedHeading = [NSNumber numberWithDouble:(360-[magneticHeading intValue]+[each.angleFromNorth intValue]) % 360];
-        each.view.center = CGPointMake(kCenterOfRadarX+kLastRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), kCenterOfRadarY-kLastRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
+        each.view.center = CGPointMake(_centerOfRadarX+kLastRingMagnitude*sin(M_PI/180*[adjustedHeading doubleValue]), _centerOfRadarY-kLastRingMagnitude*cos(M_PI/180*[adjustedHeading doubleValue]));
         [self.view addSubview:each.view];
     }
     self.locationAccuracyLabel.text = [NSString stringWithFormat:@"%u meters", (int)self.mostRecentLocation.horizontalAccuracy];
@@ -620,7 +650,12 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 
 - (void)removeAllRadarPoints
 {
-    for (LARDisplayObject *each in self.firstRingDisplayObjects) 
+    for (LARDisplayObject *each in self.reachedDisplayObjects)
+    {
+        [each.view removeFromSuperview];
+    }
+    
+    for (LARDisplayObject *each in self.firstRingDisplayObjects)
     {
         [each.view removeFromSuperview];
     }
@@ -640,6 +675,7 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
         [each.view removeFromSuperview];
     }
     
+    self.reachedDisplayObjects = nil;
     self.firstRingDisplayObjects = nil;
     self.secondRingDisplayObjects = nil;
     self.thirdRingDisplayObjects = nil;
@@ -647,27 +683,3 @@ static const int ddLogLevel = LOG_LEVEL_ERROR;
 }
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
